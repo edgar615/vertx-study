@@ -1,0 +1,8 @@
+runOnContext方法
+它会调用executeAsync方法
+
+EventLoopContext的executeAsync方法通过EventLoop.execute(runnable)
+
+MultiThreadedWorkerContext、WorkerContext的executeAsync方法通过workerExec.execute(runnable)
+
+executeAsync方法通过wrapTask方法将handler转换为Runnable,Runnable方法主要是执行handler.handle方法

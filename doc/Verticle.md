@@ -1,0 +1,7 @@
+start方法
+Verticle部署的时候会调用start方法
+
+stop方法
+Verticle取消部署的时候会调用stop方法
+
+Verticle部署的时候会创建一个Context,和vertx一起存入Verticle
