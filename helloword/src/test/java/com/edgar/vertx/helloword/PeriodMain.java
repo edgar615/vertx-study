@@ -1,6 +1,6 @@
 package com.edgar.vertx.helloword;
 
-import com.edgar.vertx.unit.Runner;
+import com.edgar.vertx.util.Runner;
 
 /**
  * Created by edgar on 16-2-21.

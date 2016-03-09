@@ -1,4 +1,4 @@
-package com.edgar.vertx.unit;
+package com.edgar.vertx.util;
 
 public class Runner {
     private static final String CORE_EXAMPLES_DIR = ".";
