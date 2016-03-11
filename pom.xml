@@ -14,6 +14,7 @@
         <module>vertx-redis</module>
         <module>vertx-mysql</module>
         <module>vertx-unit</module>
+        <module>vertx-cluster-hazelcast</module>
     </modules>
 
     <properties>
@@ -38,6 +39,12 @@
             <dependency>
                 <groupId>io.vertx</groupId>
                 <artifactId>vertx-core</artifactId>
+                <version>${vertx.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.vertx</groupId>
+                <artifactId>vertx-hazelcast</artifactId>
                 <version>${vertx.version}</version>
             </dependency>
 
