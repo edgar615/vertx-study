@@ -23,7 +23,7 @@ public class ParameterizedTest {
    */
   @Parameterized.Parameters
   public static Iterable<Integer> ports() {
-    return Arrays.asList(8080, 8081);
+    return Arrays.asList(8080, 8081, 8082);
   }
 
   private final int port;
@@ -41,6 +41,7 @@ public class ParameterizedTest {
 
   @Test
   public void test(TestContext context) {
+    System.out.println(port);
     HttpServer server = vertx.createHttpServer().requestHandler(req -> {
       context.assertEquals(port, req.localAddress().port());
       req.response().end();

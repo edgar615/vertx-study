@@ -8,6 +8,7 @@ import io.vertx.ext.unit.TestSuite;
 import io.vertx.ext.unit.report.ReportOptions;
 
 public class VertxUnitTest {
+
   public static void main(String[] args) {
     new VertxUnitTest().run();
   }
