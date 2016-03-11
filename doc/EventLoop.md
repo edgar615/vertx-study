@@ -1,0 +1,46 @@
+NioEventLoopGroup
+
+
+EventExecutorGroup继承自ScheduledExecutorService
+它主要有一个EventExecutor next()方法用来取得一个EventExecutor
+
+EventExecutor继承自EventExecutorGroup
+
+EventLoopGroup继承自EventExecutorGroup，他会将Channel和EventLoop绑定
+
+AbstractEventExecutor继承自EventExecutorGroup,他的next()方法返回自己
+
+EventLoop继承EventExecutor, EventLoopGroup
+EventLoopGroup parent()方法取得自己的父EventLoopGroup
+
+SingleThreadEventExecutor继承自AbstractScheduledEventExecutor，所有的任务都在一个线程里执行。
+它的execute(Runnable task)方法会将task放入一个队列中Queue<Runnable> taskQueue
+SingleThreadEventExecutor在初始化时会创建一个Thread，这个线程调用run方法来执行任务。
+
+DefaultEventExecutor继承自SingleThreadEventExecutor,它实现了run方法，从队列中取出任务执行。
+
+SingleThreadEventLoop继承自SingleThreadEventExecutor，实现EventLoop接口
+
+ThreadPerChannelEventLoop继承自SingleThreadEventLoop每个Channel一个ThreadPerChannelEventLoop
+
+LocalEventLoop继承自SingleThreadEventLoop
+
+NioEventLoop继承自SingleThreadEventLoop**没看懂**
+
+AbstractEventExecutorGroup实现EventExecutorGroup，它的execute(Runnable task)方法task交给一个EventExecutor去执行，而EventExecutor的选择是通过next()方法来实现
+
+MultithreadEventExecutorGroup继承自AbstractEventExecutorGroup,他会根据传入的线程数，创建多个EventExecutor
+
+MultithreadEventLoopGroup继承自MultithreadEventExecutorGroup
+
+LocalEventLoopGroup
+
+NioEventLoopGroup
+
+DefaultEventExecutorGroup
+
+ThreadPerChannelEventLoopGroup
+
+OioEventLoopGroup
+
+VertxEventLoopGroup继承自AbstractEventExecutorGroup，它的next方法通过轮询的方式查找EventLoop
