@@ -15,6 +15,7 @@
         <module>vertx-mysql</module>
         <module>vertx-unit</module>
         <module>vertx-cluster-hazelcast</module>
+        <module>vertx-eventbus</module>
     </modules>
 
     <properties>
