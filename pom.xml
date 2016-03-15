@@ -17,6 +17,7 @@
         <module>vertx-cluster-hazelcast</module>
         <module>vertx-eventbus</module>
         <module>vertx-tcp</module>
+        <module>vertx-http</module>
     </modules>
 
     <properties>
