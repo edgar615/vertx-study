@@ -25,7 +25,7 @@ public class Client extends AbstractVerticle {
     }).end();
 
     //Compression
-    vertx.createHttpClient(new HttpClientOptions().setTryUseCompression(true)).get(8080,
+    vertx.createHttpClient(new HttpClientOptions().setTryUseCompression(false)).get(8080,
                                                                                    "localhost", "/",
                                                                                    response -> {
                                                                                      System.out
@@ -34,6 +34,9 @@ public class Client extends AbstractVerticle {
                                                                                      System.out
                                                                                              .print(response.headers()
                                                                                                             .getAll("Content-Encoding"));
+                                                                                     System.out
+                                                                                             .print(response.headers()
+                                                                                                            .getAll("Transfer-Encoding"));
                                                                                      System.out
                                                                                              .print(response.statusCode());
                                                                                      response.bodyHandler(
@@ -44,5 +47,6 @@ public class Client extends AbstractVerticle {
                                                                                    }).putHeader(
             "Accept-Encoding", "gzip").end();
     //.putHeader("Accept-Encoding", "deflate")
+
   }
 }

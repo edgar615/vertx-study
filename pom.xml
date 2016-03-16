@@ -18,6 +18,12 @@
         <module>vertx-eventbus</module>
         <module>vertx-tcp</module>
         <module>vertx-http</module>
+        <module>vertx-sharedata</module>
+        <module>vertx-file</module>
+        <module>vertx-dns</module>
+        <module>stream</module>
+        <module>vert-cli</module>
+        <module>vertx-launcher</module>
     </modules>
 
     <properties>
