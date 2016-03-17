@@ -24,6 +24,7 @@
         <module>stream</module>
         <module>vert-cli</module>
         <module>vertx-launcher</module>
+        <module>vertx-web-router</module>
     </modules>
 
     <properties>
@@ -48,6 +49,16 @@
             <dependency>
                 <groupId>io.vertx</groupId>
                 <artifactId>vertx-core</artifactId>
+                <version>${vertx.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.vertx</groupId>
+                <artifactId>vertx-web</artifactId>
+                <version>${vertx.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.vertx</groupId>
+                <artifactId>vertx-auth-common</artifactId>
                 <version>${vertx.version}</version>
             </dependency>
 

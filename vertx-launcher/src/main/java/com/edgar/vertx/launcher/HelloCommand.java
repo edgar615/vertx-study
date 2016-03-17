@@ -38,6 +38,8 @@ public class HelloCommand extends DefaultCommand {
 //
 //  add / remove commands using register and unregister
 
+  //运行命令：D:\dev\workspace\vertx-study\vertx-launcher\target>java -jar vertx-launcher.jar my-command hello --name vert.x
+
   @Override
   public void run() throws CLIException {
     System.out.println("Hello " + name);

@@ -62,9 +62,9 @@
                             <classpathPrefix>lib/</classpathPrefix>
                             <mainClass>io.vertx.core.Launcher</mainClass>
                         </manifest>
-                        <!--<manifestEntries>
-                            <BuildNumber>${buildNumber}</BuildNumber>
-                        </manifestEntries>-->
+                        <manifestEntries>
+                            <Main-Verticle>com.edgar.vertx.launcher.HelloVerticle</Main-Verticle>
+                        </manifestEntries>
                     </archive>
                 </configuration>
             </plugin>
