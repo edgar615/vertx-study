@@ -26,6 +26,7 @@
         <module>vertx-launcher</module>
         <module>vertx-web-router</module>
         <module>dropwizard-metrics</module>
+        <module>vertx-jwt</module>
     </modules>
 
     <properties>
