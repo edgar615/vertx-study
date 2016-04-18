@@ -1,9 +1,8 @@
 package com.edgar.vertx.sharedata.cluster;
 
-import com.edgar.vertx.util.Runner;
+import com.edgar.util.vertx.runner.Runner;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.shareddata.AsyncMap;
-import io.vertx.core.shareddata.LocalMap;
 import io.vertx.core.shareddata.SharedData;
 
 /**

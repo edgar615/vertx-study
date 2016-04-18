@@ -1,6 +1,6 @@
 package com.edgar.vertx.web.unit;
 
-import com.edgar.vertx.util.Runner;
+import com.edgar.util.vertx.runner.Runner;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Future;
 import io.vertx.core.http.HttpServerResponse;

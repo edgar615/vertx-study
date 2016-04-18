@@ -1,10 +1,8 @@
 package com.edgar.vertx.web.tpl;
 
-import com.edgar.vertx.util.Runner;
+import com.edgar.util.vertx.runner.Runner;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.ext.web.Router;
-import io.vertx.ext.web.handler.ErrorHandler;
-import io.vertx.ext.web.templ.TemplateEngine;
 
 public class Server extends AbstractVerticle {
 

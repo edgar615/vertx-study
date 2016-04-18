@@ -1,4 +1,4 @@
-package com.edgar.vertx.util;
+package com.edgar.util.vertx.runner;
 
 import io.vertx.core.DeploymentOptions;
 import io.vertx.core.Vertx;

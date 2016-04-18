@@ -1,6 +1,6 @@
 package com.edgar.vertx.eventbus;
 
-import com.edgar.vertx.util.Runner;
+import com.edgar.util.vertx.runner.Runner;
 
 /**
  * Created by Edgar on 2016/3/14.

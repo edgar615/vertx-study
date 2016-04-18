@@ -1,6 +1,6 @@
 package com.edgar.vertx.tcp.share;
 
-import com.edgar.vertx.util.Runner;
+import com.edgar.util.vertx.runner.Runner;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.DeploymentOptions;
 

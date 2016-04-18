@@ -1,6 +1,5 @@
 package com.edgar.vertx.eventbus;
 
-import com.edgar.vertx.util.Runner;
 import io.vertx.core.Vertx;
 
 /**

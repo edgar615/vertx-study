@@ -1,8 +1,7 @@
 package com.edgar.vertx.http.continue100;
 
-import com.edgar.vertx.util.Runner;
+import com.edgar.util.vertx.runner.Runner;
 import io.vertx.core.AbstractVerticle;
-import io.vertx.core.http.HttpClientOptions;
 import io.vertx.core.http.HttpClientRequest;
 
 /**

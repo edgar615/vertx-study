@@ -1,9 +1,7 @@
 package com.edgar.vertx.http.simple;
 
-import com.edgar.vertx.util.Runner;
+import com.edgar.util.vertx.runner.Runner;
 import io.vertx.core.AbstractVerticle;
-import io.vertx.core.MultiMap;
-import io.vertx.core.json.JsonObject;
 
 /**
  * Created by Edgar on 2016/3/15.

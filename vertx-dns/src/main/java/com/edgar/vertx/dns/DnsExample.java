@@ -1,6 +1,6 @@
 package com.edgar.vertx.dns;
 
-import com.edgar.vertx.util.Runner;
+import com.edgar.util.vertx.runner.Runner;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.dns.DnsClient;
 import io.vertx.core.dns.MxRecord;

@@ -1,6 +1,6 @@
 package com.edgar.vertx.web.router;
 
-import com.edgar.vertx.util.Runner;
+import com.edgar.util.vertx.runner.Runner;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.http.HttpMethod;
 import io.vertx.core.http.HttpServer;
@@ -68,6 +68,8 @@ public class RouterVerticle extends AbstractVerticle {
 // This regular expression matches paths that start with something like:
 // "/bar/123" - where the "bar" is captured into param0 and the "123" is captured into
 // param1
+
+//    router.route().pathRegex("\\/([\\d+]+)\\/([^\\/]+)\\/([^\\/]+)");
     router.routeWithRegex(".*bar").pathRegex("\\/([^\\/]+)\\/([^\\/]+)").handler(routingContext -> {
 
       String productType = routingContext.request().getParam("param0");

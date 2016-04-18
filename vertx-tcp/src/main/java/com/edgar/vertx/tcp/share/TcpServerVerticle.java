@@ -1,11 +1,7 @@
 package com.edgar.vertx.tcp.share;
 
-import com.edgar.vertx.util.Runner;
 import io.vertx.core.AbstractVerticle;
-import io.vertx.core.DeploymentOptions;
-import io.vertx.core.Vertx;
 import io.vertx.core.net.NetServer;
-import io.vertx.core.net.NetServerOptions;
 
 /**
  * Created by Edgar on 2016/3/14.

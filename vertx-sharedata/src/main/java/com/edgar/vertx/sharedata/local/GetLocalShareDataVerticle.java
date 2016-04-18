@@ -1,6 +1,5 @@
 package com.edgar.vertx.sharedata.local;
 
-import com.edgar.vertx.util.Runner;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.shareddata.LocalMap;
 import io.vertx.core.shareddata.SharedData;

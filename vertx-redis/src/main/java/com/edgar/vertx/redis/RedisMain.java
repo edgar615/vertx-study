@@ -1,9 +1,6 @@
 package com.edgar.vertx.redis;
 
-import com.edgar.vertx.util.Runner;
-import io.vertx.core.Vertx;
-import io.vertx.core.json.JsonObject;
-import io.vertx.redis.RedisClient;
+import com.edgar.util.vertx.runner.Runner;
 
 /**
  * Created by Edgar on 2016/3/8.

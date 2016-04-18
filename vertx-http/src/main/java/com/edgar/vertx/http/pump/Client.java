@@ -1,6 +1,6 @@
 package com.edgar.vertx.http.pump;
 
-import com.edgar.vertx.util.Runner;
+import com.edgar.util.vertx.runner.Runner;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.json.JsonObject;
 
