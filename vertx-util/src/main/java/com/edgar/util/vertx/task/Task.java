@@ -1,8 +1,11 @@
 package com.edgar.util.vertx.task;
 
+import io.vertx.core.AsyncResult;
 import io.vertx.core.Future;
+import io.vertx.core.Handler;
 import io.vertx.core.Vertx;
 
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -22,20 +25,38 @@ public class Task<T> {
     this.future = future;
   }
 
-  public void onNext(Consumer<T> successHandler, Consumer<Throwable> failureHandler) {
-    if (future.succeeded()) {
-      successHandler.accept(future.result());
-    } else {
-      failureHandler.accept(future.cause());
-    }
+  public Future<T> getFuture() {
+    return future;
   }
 
-  public void complete(T result) {
-    future.complete(result);
+  public Vertx getVertx() {
+    return vertx;
   }
 
-//  public <R> Task<R> map(Function<T, R> function) {
-//    R r = function.apply(future.result());
-//    return new Task<>(vertx, );
-//  }
+  public <R> Task<R> map(Function<T, R> function) {
+    Future<R> rFuture = Future.future();
+    TransformHandler<T, R> handler = new TransformHandler<>(rFuture, function, null);
+    future.setHandler(handler);
+    return new Task<>(vertx, rFuture);
+  }
+
+  public Task<T> andThen(Consumer<T> consumer) {
+    return map(t -> {
+      consumer.accept(t);
+      return t;
+    });
+  }
+
+  public <R> Task<R> flatMap(Task<R> task) {
+    Future<R> rFuture = Future.future();
+    return new Task<>(vertx, rFuture);
+  }
+
+  public Task<T> onFailure(Consumer<Throwable> consumer) {
+    Future<T> rFuture = Future.future();
+    TransformHandler<T, T> handler = new TransformHandler<>(rFuture, null, consumer);
+    future.setHandler(handler);
+    return new Task<>(vertx, rFuture);
+  }
+
 }
