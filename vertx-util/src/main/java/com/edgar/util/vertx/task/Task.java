@@ -1,9 +1,6 @@
 package com.edgar.util.vertx.task;
 
-import io.vertx.core.AsyncResult;
 import io.vertx.core.Future;
-import io.vertx.core.Handler;
-import io.vertx.core.Vertx;
 
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
@@ -16,47 +13,50 @@ import java.util.function.Function;
  */
 public class Task<T> {
 
-  private final Vertx vertx;
-
   private final Future<T> future;
 
-  public Task(Vertx vertx, Future<T> future) {
-    this.vertx = vertx;
+  public Task(Future<T> future) {
     this.future = future;
   }
 
-  public Future<T> getFuture() {
-    return future;
-  }
+//  public static <T> Task<T> create() {
+//    return new Task<>(Future.<T>future());
+//  }
 
-  public Vertx getVertx() {
-    return vertx;
-  }
-
-  public <R> Task<R> map(Function<T, R> function) {
+  public <R> Task<R> map(String desc, Function<T, R> function) {
     Future<R> rFuture = Future.future();
-    TransformHandler<T, R> handler = new TransformHandler<>(rFuture, function, null);
+    TransformHandler<T, R> handler = new TransformHandler<>(desc, rFuture,
+                                                            function, null);
     future.setHandler(handler);
-    return new Task<>(vertx, rFuture);
+    return new Task<>(rFuture);
   }
 
-  public Task<T> andThen(Consumer<T> consumer) {
-    return map(t -> {
+  public Task<T> andThen(String desc, Consumer<T> consumer) {
+    return map(desc, t -> {
       consumer.accept(t);
       return t;
     });
   }
 
-  public <R> Task<R> flatMap(Task<R> task) {
+  public <R> Task<R> flatMap(String desc, BiConsumer<T, Future<R>> consumer) {
     Future<R> rFuture = Future.future();
-    return new Task<>(vertx, rFuture);
+    future.setHandler(new FuturePropagator(desc, rFuture, consumer));
+    return new Task<>(rFuture);
   }
 
-  public Task<T> onFailure(Consumer<Throwable> consumer) {
+  public Task<T> onFailure(String desc, Consumer<Throwable> consumer) {
     Future<T> rFuture = Future.future();
-    TransformHandler<T, T> handler = new TransformHandler<>(rFuture, null, consumer);
+    TransformHandler<T, T> handler = new TransformHandler<>(desc, rFuture,
+                                                            t -> t,
+                                                            consumer);
     future.setHandler(handler);
-    return new Task<>(vertx, rFuture);
+    return new Task<>(rFuture);
   }
 
+  public static <T> Task<T> create(Consumer<Future<T>> consumer) {
+    Future<T> future = Future.<T>future();
+    Task<T> task = new Task<>(future);
+    consumer.accept(future);
+    return task;
+  }
 }

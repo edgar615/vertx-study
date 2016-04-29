@@ -10,27 +10,39 @@ import java.util.function.Function;
 /**
  * Created by edgar on 16-4-28.
  */
-public class TransformHandler<T, R> implements Handler<AsyncResult<T>> {
+class TransformHandler<T, R> implements Handler<AsyncResult<T>> {
 
-  private final Future<R> dest;
+  private final Future<R> future;
+
   private final Function<T, R> function;
-  private final Consumer<Throwable> consumer;
 
-  public TransformHandler(Future<R> dest, Function<T, R> function, Consumer<Throwable> consumer) {
-    this.dest = dest;
+  private final Consumer<Throwable> failureHandler;
+
+  private final String desc;
+
+  public TransformHandler(String desc, Future<R> future, Function<T, R> function,
+                          Consumer<Throwable> failureHandler) {
+    this.desc = desc;
+    this.future = future;
     this.function = function;
-    this.consumer = consumer;
+    this.failureHandler = failureHandler;
   }
 
   @Override
-  public void handle(AsyncResult<T> future) {
-    if (future.succeeded()) {
-      dest.complete(function.apply(future.result()));
-    } else {
-      if (consumer != null) {
-        consumer.accept(future.cause());
+  public void handle(AsyncResult<T> result) {
+    Throwable throwable = result.cause();
+    if (result.succeeded()) {
+      try {
+        future.complete(function.apply(result.result()));
+      } catch (Exception e) {
+        throwable = e;
       }
-      dest.fail(future.cause());
+    }
+    if (throwable != null) {
+      if (failureHandler != null) {
+        failureHandler.accept(throwable);
+      }
+      future.fail(throwable);
     }
   }
 }
