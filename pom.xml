@@ -28,6 +28,7 @@
         <module>dropwizard-metrics</module>
         <module>vertx-jwt</module>
         <module>vertx-sync</module>
+        <module>vertx-web-handlebar</module>
     </modules>
 
     <properties>
@@ -94,6 +95,12 @@
                 <artifactId>vertx-unit</artifactId>
                 <version>${vertx.version}</version>
                 <scope>test</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>io.vertx</groupId>
+                <artifactId>vertx-web-templ-handlebars</artifactId>
+                <version>${vertx.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

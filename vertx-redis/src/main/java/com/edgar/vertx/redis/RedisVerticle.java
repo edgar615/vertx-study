@@ -1,6 +1,7 @@
 package com.edgar.vertx.redis;
 
 import io.vertx.core.AbstractVerticle;
+import io.vertx.core.Future;
 import io.vertx.redis.RedisClient;
 import io.vertx.redis.RedisOptions;
 
@@ -18,8 +19,29 @@ public class RedisVerticle extends AbstractVerticle {
 //    tcpKeepAlive: default true
 //    tcpNoDelay: default true
     RedisOptions config = new RedisOptions()
-            .setHost("192.168.149.138");
+            .setHost("192.168.149.138")
+            .setPort(6379);
+//            .setAuth("Edgar");
     RedisClient redisClient = RedisClient.create(vertx, config);
+//    Future<String> multiFuture = Future.future();
+//    redisClient.multi(multiFuture.completer());
+//    multiFuture.setHandler(ar -> {
+//      System.out.println(ar.result());
+//    });
+//    redisClient.multi(ar -> {
+//      System.out.println(ar.result());
+//    }).spop("foo", ar -> {
+//      System.out.println(ar.result());
+//    }).spop("foo", ar -> {
+//      System.out.println(ar.result());
+//    }).sadd("foo", "3", ar -> {
+//      System.out.println(ar.result());
+//    }).sadd("foo", "4", ar -> {
+//      System.out.println(ar.result());
+//    }).exec(ar -> {
+//      System.out.println(ar.result());
+//    });
+
     redisClient.set("foo", "bar", res -> {
       if (res.succeeded()) {
         System.out.println(res.result());
