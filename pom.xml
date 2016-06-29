@@ -29,11 +29,12 @@
         <module>vertx-jwt</module>
         <module>vertx-sync</module>
         <module>vertx-web-handlebar</module>
+        <module>vertx-service-discovery</module>
     </modules>
 
     <properties>
         <junit.version>4.12</junit.version>
-        <vertx.version>3.2.1</vertx.version>
+        <vertx.version>3.3.0</vertx.version>
         <slf4j.version>1.7.7</slf4j.version>
     </properties>
 
@@ -100,6 +101,12 @@
             <dependency>
                 <groupId>io.vertx</groupId>
                 <artifactId>vertx-web-templ-handlebars</artifactId>
+                <version>${vertx.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.vertx</groupId>
+                <artifactId>vertx-service-discovery</artifactId>
                 <version>${vertx.version}</version>
             </dependency>
         </dependencies>
