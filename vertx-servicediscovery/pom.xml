@@ -9,13 +9,17 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>vertx-service-discovery</artifactId>
+    <artifactId>vertx-servicediscovery</artifactId>
+
 
     <dependencies>
         <dependency>
             <groupId>io.vertx</groupId>
             <artifactId>vertx-service-discovery</artifactId>
         </dependency>
+        <dependency>
+            <groupId>io.vertx</groupId>
+            <artifactId>vertx-hazelcast</artifactId>
+        </dependency>
     </dependencies>
-
 </project>

@@ -29,7 +29,7 @@
         <module>vertx-jwt</module>
         <module>vertx-sync</module>
         <module>vertx-web-handlebar</module>
-        <module>vertx-service-discovery</module>
+        <module>vertx-servicediscovery</module>
     </modules>
 
     <properties>
