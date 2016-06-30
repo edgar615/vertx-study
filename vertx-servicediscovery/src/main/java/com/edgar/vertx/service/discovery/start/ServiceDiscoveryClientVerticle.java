@@ -1,14 +1,8 @@
-package com.edgar.vertx.service.discovery;
+package com.edgar.vertx.service.discovery.start;
 
 import io.vertx.core.AbstractVerticle;
-import io.vertx.core.Vertx;
-import io.vertx.core.VertxOptions;
-import io.vertx.core.json.JsonObject;
-import io.vertx.core.spi.cluster.ClusterManager;
-import io.vertx.servicediscovery.Record;
+import io.vertx.core.Launcher;
 import io.vertx.servicediscovery.ServiceDiscovery;
-import io.vertx.servicediscovery.types.HttpEndpoint;
-import io.vertx.spi.cluster.hazelcast.HazelcastClusterManager;
 
 /**
  * Created by edgar on 16-6-29.
@@ -16,17 +10,17 @@ import io.vertx.spi.cluster.hazelcast.HazelcastClusterManager;
 public class ServiceDiscoveryClientVerticle extends AbstractVerticle {
 
     public static void main(String[] args) {
-        ClusterManager mgr = new HazelcastClusterManager();
-
-        VertxOptions options = new VertxOptions().setClusterManager(mgr);
-        Vertx.clusteredVertx(options, res -> {
-            if (res.succeeded()) {
-                Vertx vertx = res.result();
-                vertx.deployVerticle(ServiceDiscoveryClientVerticle.class.getName());
-            } else {
-                // failed!
-            }
-        });
+      new Launcher().execute("run", ServiceDiscoveryClientVerticle.class.getName(), "--cluster");
+//        ClusterManager mgr = new HazelcastClusterManager();
+//        VertxOptions options = new VertxOptions().setClusterManager(mgr);
+//        Vertx.clusteredVertx(options, res -> {
+//            if (res.succeeded()) {
+//                Vertx vertx = res.result();
+//                vertx.deployVerticle(ServiceDiscoveryClientVerticle.class.getName());
+//            } else {
+//                // failed!
+//            }
+//        });
     }
 
     @Override

@@ -30,6 +30,7 @@
         <module>vertx-sync</module>
         <module>vertx-web-handlebar</module>
         <module>vertx-servicediscovery</module>
+        <module>vertx-jdbc</module>
     </modules>
 
     <properties>
@@ -109,6 +110,67 @@
                 <artifactId>vertx-service-discovery</artifactId>
                 <version>${vertx.version}</version>
             </dependency>
+
+            <dependency>
+                <groupId>io.vertx</groupId>
+                <artifactId>vertx-service-proxy</artifactId>
+                <version>${vertx.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.vertx</groupId>
+                <artifactId>vertx-codegen</artifactId>
+                <version>${vertx.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.vertx</groupId>
+                <artifactId>vertx-jdbc-client</artifactId>
+                <version>${vertx.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <!-- Configure the execution of the compiler to execute the codegen processor -->
+                <plugin>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>3.1</version>
+                    <configuration>
+                        <source>1.8</source>
+                        <target>1.8</target>
+                        <encoding>UTF-8</encoding>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <id>default-compile</id>
+                            <configuration>
+                                <annotationProcessors>
+                                    <annotationProcessor>io.vertx.codegen.CodeGenProcessor</annotationProcessor>
+                                </annotationProcessors>
+                                <generatedSourcesDirectory>src/main/java</generatedSourcesDirectory>
+                                <compilerArgs>
+                                    <arg>-AoutputDirectory=${project.basedir}/src/main</arg>
+                                </compilerArgs>
+                            </configuration>
+                        </execution>
+                        <execution>
+                            <id>default-testCompile</id>
+                            <configuration>
+                                <annotationProcessors>
+                                    <annotationProcessor>io.vertx.codegen.CodeGenProcessor</annotationProcessor>
+                                </annotationProcessors>
+                                <generatedTestSourcesDirectory>src/test/java</generatedTestSourcesDirectory>
+                                <compilerArgs>
+                                    <arg>-AoutputDirectory=${project.basedir}/src/test</arg>
+                                </compilerArgs>
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
 </project>
