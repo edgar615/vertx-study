@@ -34,6 +34,11 @@
 
         <dependency>
             <groupId>io.vertx</groupId>
+            <artifactId>vertx-service-discovery-backend-redis</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>io.vertx</groupId>
             <artifactId>vertx-jdbc-client</artifactId>
             <exclusions>
                 <exclusion>
