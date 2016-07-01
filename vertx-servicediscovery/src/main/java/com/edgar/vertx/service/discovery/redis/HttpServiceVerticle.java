@@ -24,8 +24,10 @@ public class HttpServiceVerticle extends AbstractVerticle {
     Map<String, String> map = new HashMap<>();
     @Override
     public void start() throws Exception {
-        discovery = ServiceDiscovery.create(vertx, new ServiceDiscoveryOptions()
-                .setBackendConfiguration(new JsonObject().put("host", "10.11.0.31").put("key", "records")));
+        //引入vertx-service-discovery-backend-redis之后，所有的ServiceDiscovery都需要使用redis，所以这里先注释
+        ServiceDiscovery discovery = ServiceDiscovery.create(vertx);
+//        discovery = ServiceDiscovery.create(vertx, new ServiceDiscoveryOptions()
+//                .setBackendConfiguration(new JsonObject().put("host", "10.11.0.31").put("key", "records")));
 
         //服务关闭之后，redis中的值仍然存在
         Record httpRecord = HttpEndpoint.createRecord("some-rest-api", "localhost", 8080, "/api");

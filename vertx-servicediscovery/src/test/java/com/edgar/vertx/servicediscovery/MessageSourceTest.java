@@ -1,3 +1,5 @@
+package com.edgar.vertx.servicediscovery;
+
 import io.vertx.core.Vertx;
 import io.vertx.core.eventbus.MessageConsumer;
 import io.vertx.core.json.JsonObject;
@@ -32,8 +34,9 @@ public class MessageSourceTest {
     @Before
     public void setUp() {
         vertx = Vertx.vertx();
-        discovery = ServiceDiscovery.create(vertx, new ServiceDiscoveryOptions()
-                .setBackendConfiguration(new JsonObject().put("host", "10.11.0.31").put("key", "records")));;
+        discovery = ServiceDiscovery.create(vertx);
+//        discovery = ServiceDiscovery.create(vertx, new ServiceDiscoveryOptions()
+//                .setBackendConfiguration(new JsonObject().put("host", "10.11.0.31").put("key", "records")));;
     }
 
     @After
@@ -74,7 +77,6 @@ public class MessageSourceTest {
         await().until(() -> !data.isEmpty());
         service.release();
         int size = data.size();
-        System.out.println(data);
         Thread.sleep(500);
         assertThat(data.size()).isEqualTo(size);
 

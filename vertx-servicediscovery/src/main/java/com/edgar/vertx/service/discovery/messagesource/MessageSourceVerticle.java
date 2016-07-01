@@ -22,9 +22,7 @@ public class MessageSourceVerticle extends AbstractVerticle {
 
     @Override
     public void start() throws Exception {
-//        ServiceDiscovery discovery = ServiceDiscovery.create(vertx);
-        ServiceDiscovery discovery = ServiceDiscovery.create(vertx, new ServiceDiscoveryOptions()
-                .setBackendConfiguration(new JsonObject().put("host", "10.11.0.31").put("key", "records")));;
+        ServiceDiscovery discovery = ServiceDiscovery.create(vertx);
         Record record = MessageSource.createRecord(
                 "some-message-source-service", // The service name
                 "some-address" // The event bus address

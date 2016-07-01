@@ -21,9 +21,7 @@ public class MessageSourceClientVerticle extends AbstractVerticle {
 
     @Override
     public void start() throws Exception {
-//        ServiceDiscovery discovery = ServiceDiscovery.create(vertx);
-        ServiceDiscovery discovery = ServiceDiscovery.create(vertx, new ServiceDiscoveryOptions()
-                .setBackendConfiguration(new JsonObject().put("host", "10.11.0.31").put("key", "records")));
+        ServiceDiscovery discovery = ServiceDiscovery.create(vertx);
         discovery.getRecord(new JsonObject().put("name", "some-message-source-service"), ar -> {
             Record record = ar.result();
             System.out.println(record.getType());

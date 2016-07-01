@@ -51,10 +51,10 @@
             <artifactId>vertx-codegen</artifactId>
         </dependency>
 
-        <dependency>
+<!--        <dependency>
             <groupId>io.vertx</groupId>
             <artifactId>vertx-service-discovery-backend-redis</artifactId>
-        </dependency>
+        </dependency>-->
 
         <dependency>
             <groupId>io.vertx</groupId>
