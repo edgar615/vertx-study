@@ -28,9 +28,14 @@ public class MessageSourceClientVerticle extends AbstractVerticle {
             System.out.println(record.getLocation());
             ServiceReference reference = discovery.getReference(record);
             MessageConsumer<JsonObject> messageConsumer = reference.get();
-            messageConsumer.handler(msg -> {
-                JsonObject payload = msg.body();
-                System.out.println(payload);
+            System.out.println(messageConsumer.address());
+//            messageConsumer.handler(msg -> {
+//                JsonObject payload = msg.body();
+//                System.out.println(payload);
+//            });
+            vertx.setPeriodic(1000, l -> {
+                System.out.println("publish");
+                vertx.eventBus().publish(messageConsumer.address(), new JsonObject().put("foo", "bar"));
             });
             reference.release();
         });

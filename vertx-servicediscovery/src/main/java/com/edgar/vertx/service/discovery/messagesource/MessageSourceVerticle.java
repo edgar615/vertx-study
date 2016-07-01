@@ -27,6 +27,11 @@ public class MessageSourceVerticle extends AbstractVerticle {
                 "some-address" // The event bus address
         );
 
+        vertx.eventBus().<JsonObject>consumer("some-address", msg -> {
+            JsonObject payload = msg.body();
+            System.out.println(payload);
+        });
+
 //      record = MessageSource.createRecord(
 //              "some-other-message-source-service", // The service name
 //              "some-address", // The event bus address
@@ -55,10 +60,10 @@ public class MessageSourceVerticle extends AbstractVerticle {
             }
         });
 
-        vertx.setPeriodic(1000, l -> {
-            System.out.println("publish");
-            vertx.eventBus().publish("some-address", new JsonObject().put("foo", "bar"));
-        });
+//        vertx.setPeriodic(1000, l -> {
+//            System.out.println("publish");
+//            vertx.eventBus().publish("some-address", new JsonObject().put("foo", "bar"));
+//        });
         discovery.close();
     }
 }
