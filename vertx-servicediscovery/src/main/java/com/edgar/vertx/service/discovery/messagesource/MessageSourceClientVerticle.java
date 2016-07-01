@@ -6,6 +6,7 @@ import io.vertx.core.eventbus.MessageConsumer;
 import io.vertx.core.json.JsonObject;
 import io.vertx.servicediscovery.Record;
 import io.vertx.servicediscovery.ServiceDiscovery;
+import io.vertx.servicediscovery.ServiceDiscoveryOptions;
 import io.vertx.servicediscovery.ServiceReference;
 
 /**
@@ -20,8 +21,9 @@ public class MessageSourceClientVerticle extends AbstractVerticle {
 
     @Override
     public void start() throws Exception {
-        ServiceDiscovery discovery = ServiceDiscovery.create(vertx);
-
+//        ServiceDiscovery discovery = ServiceDiscovery.create(vertx);
+        ServiceDiscovery discovery = ServiceDiscovery.create(vertx, new ServiceDiscoveryOptions()
+                .setBackendConfiguration(new JsonObject().put("host", "10.11.0.31").put("key", "records")));
         discovery.getRecord(new JsonObject().put("name", "some-message-source-service"), ar -> {
             Record record = ar.result();
             System.out.println(record.getType());
@@ -29,14 +31,21 @@ public class MessageSourceClientVerticle extends AbstractVerticle {
             ServiceReference reference = discovery.getReference(record);
             MessageConsumer<JsonObject> messageConsumer = reference.get();
             System.out.println(messageConsumer.address());
-//            messageConsumer.handler(msg -> {
-//                JsonObject payload = msg.body();
-//                System.out.println(payload);
+//            vertx.eventBus().consumer("some-address", msg -> {
+//                System.out.println(msg.body());
 //            });
-            vertx.setPeriodic(1000, l -> {
-                System.out.println("publish");
-                vertx.eventBus().publish(messageConsumer.address(), new JsonObject().put("foo", "bar"));
+            messageConsumer.handler(msg -> {
+                try {
+                    JsonObject payload = msg.body();
+                    System.out.println(payload);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             });
+//            vertx.setPeriodic(1000, l -> {
+//                System.out.println("publish");
+//                vertx.eventBus().publish(messageConsumer.address(), new JsonObject().put("foo", "bar"));
+//            });
             reference.release();
         });
         discovery.close();

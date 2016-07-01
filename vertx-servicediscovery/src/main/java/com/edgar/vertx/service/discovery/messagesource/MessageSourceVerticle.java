@@ -5,6 +5,7 @@ import io.vertx.core.Launcher;
 import io.vertx.core.json.JsonObject;
 import io.vertx.servicediscovery.Record;
 import io.vertx.servicediscovery.ServiceDiscovery;
+import io.vertx.servicediscovery.ServiceDiscoveryOptions;
 import io.vertx.servicediscovery.types.MessageSource;
 
 import java.util.concurrent.TimeUnit;
@@ -21,16 +22,18 @@ public class MessageSourceVerticle extends AbstractVerticle {
 
     @Override
     public void start() throws Exception {
-        ServiceDiscovery discovery = ServiceDiscovery.create(vertx);
+//        ServiceDiscovery discovery = ServiceDiscovery.create(vertx);
+        ServiceDiscovery discovery = ServiceDiscovery.create(vertx, new ServiceDiscoveryOptions()
+                .setBackendConfiguration(new JsonObject().put("host", "10.11.0.31").put("key", "records")));;
         Record record = MessageSource.createRecord(
                 "some-message-source-service", // The service name
                 "some-address" // The event bus address
         );
 
-        vertx.eventBus().<JsonObject>consumer("some-address", msg -> {
-            JsonObject payload = msg.body();
-            System.out.println(payload);
-        });
+            vertx.setPeriodic(100, l -> {
+                System.out.println("publish");
+                vertx.eventBus().publish("some-address", new JsonObject().put("foo", "bar"));
+            });
 
 //      record = MessageSource.createRecord(
 //              "some-other-message-source-service", // The service name
@@ -56,7 +59,7 @@ public class MessageSourceVerticle extends AbstractVerticle {
                 System.out.println(publishedRecord.getType());
                 System.out.println(publishedRecord.getStatus());
             } else {
-
+                ar.cause().printStackTrace();
             }
         });
 
