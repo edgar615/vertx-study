@@ -190,7 +190,7 @@ public interface Task<T> {
      * @return task
      */
     default <R> Task<R> flatMap(Function<T, Future<R>> function) {
-        return flatMap(null, function);
+        return flatMap("map: " + function.getClass().getName(), function);
     }
 
     /**
