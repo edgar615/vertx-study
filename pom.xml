@@ -32,11 +32,12 @@
         <module>vertx-servicediscovery</module>
         <module>vertx-jdbc</module>
         <module>vertx-circuit</module>
+        <module>vertx-oauth2-test</module>
     </modules>
 
     <properties>
         <junit.version>4.12</junit.version>
-        <vertx.version>3.3.0</vertx.version>
+        <vertx.version>3.3.2</vertx.version>
         <slf4j.version>1.7.7</slf4j.version>
     </properties>
 
@@ -143,6 +144,12 @@
             <dependency>
                 <groupId>io.vertx</groupId>
                 <artifactId>vertx-jdbc-client</artifactId>
+                <version>${vertx.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.vertx</groupId>
+                <artifactId>vertx-sync</artifactId>
                 <version>${vertx.version}</version>
             </dependency>
         </dependencies>
