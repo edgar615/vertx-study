@@ -9,6 +9,8 @@ import io.vertx.ext.auth.oauth2.OAuth2Auth;
 import io.vertx.ext.auth.oauth2.OAuth2ClientOptions;
 import io.vertx.ext.auth.oauth2.OAuth2FlowType;
 import io.vertx.ext.web.Router;
+import io.vertx.ext.web.templ.HandlebarsTemplateEngine;
+import io.vertx.ext.web.templ.TemplateEngine;
 
 /**
  * Created by edgar on 16-8-20.
@@ -23,8 +25,8 @@ public class AuthorizationCodeFlow extends AbstractVerticle {
 
         //OAuth2.0
         OAuth2ClientOptions credentials = new OAuth2ClientOptions()
-                .setClientID("xxxxxxxxxx")
-                .setClientSecret("xxxxxxxxxxxxxxxxxxxxx")
+                .setClientID("xxxxxxxxxxxxxxxxx")
+                .setClientSecret("xxxxxxxxxxxxxxx")
                 .setSite("https://github.com/login")
                 .setTokenPath("/oauth/access_token")
                 .setAuthorizationPath("/oauth/authorize");
@@ -41,10 +43,24 @@ public class AuthorizationCodeFlow extends AbstractVerticle {
 
         System.out.println(authorization_uri);
 
+        TemplateEngine engine = HandlebarsTemplateEngine.create();
+
         HttpServer server = vertx.createHttpServer();
 
         Router router = Router.router(vertx);
         router.get("/login").handler(rc -> {
+            rc.put("name", "开放平台测试");
+
+            engine.render(rc, "templates/index.hbs", res -> {
+                if (res.succeeded()) {
+                    rc.response().end(res.result());
+                } else {
+                    rc.fail(res.cause());
+                }
+            });
+        });
+
+        router.get("/github/login").handler(rc -> {
             // Redirect example using Vert.x
             rc.response().putHeader("Location", authorization_uri)
                     .setStatusCode(302)
