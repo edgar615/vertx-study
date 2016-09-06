@@ -6,7 +6,7 @@ import io.vertx.core.cli.annotations.Option;
 import io.vertx.core.cli.annotations.Summary;
 import io.vertx.core.spi.launcher.DefaultCommand;
 
-@Name("my-command")
+@Name("hello")
 @Summary("A simple hello command.")
 public class HelloCommand extends DefaultCommand {
 

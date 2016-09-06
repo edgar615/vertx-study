@@ -26,6 +26,16 @@
             <artifactId>vertx-unit</artifactId>
             <scope>test</scope>
         </dependency>
+
+        <dependency>
+            <groupId>io.vertx</groupId>
+            <artifactId>vertx-codegen</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>io.vertx</groupId>
+            <artifactId>vertx-hazelcast</artifactId>
+        </dependency>
     </dependencies>
 
     <build>
@@ -63,7 +73,7 @@
                             <mainClass>io.vertx.core.Launcher</mainClass>
                         </manifest>
                         <manifestEntries>
-                            <Main-Verticle>com.edgar.vertx.launcher.HelloVerticle</Main-Verticle>
+                            <Main-Verticle>com.edgar.vertx.launcher.Server</Main-Verticle>
                         </manifestEntries>
                     </archive>
                 </configuration>
