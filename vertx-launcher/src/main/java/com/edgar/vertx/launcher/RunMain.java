@@ -10,8 +10,6 @@ import io.vertx.core.Launcher;
 public class RunMain {
     public static void main(String[] args) {
         new Launcher().execute("--help");
-        new Launcher().execute("run", Server.class.getName());
-//                           "--conf=target/config.json");
-        System.out.println("starting");
+        new Launcher().execute("start", HelloVerticle.class.getName());
     }
 }
