@@ -42,11 +42,23 @@ public class HttpSeverVerticle extends AbstractVerticle {
       if ("paulo".equals(username) && "super_secret".equals(password)) {
         String token =
                 provider.generateToken(new JsonObject().put("sub", "paulo"), new JWTOptions());
+          String expToken =
+                  provider.generateToken(new JsonObject().put("sub", "paulo"), new JWTOptions().setExpiresInSeconds(10000l));
         // now for any request to protected resources you should pass this string in the HTTP
         // header Authorization as:
         // Authorization: Bearer <token>
-        rc.response().putHeader("content-type", "application/json").end(
-                new JsonObject().put("token", token).encode()
+
+//          iss: token的发行者
+//          sub: token的题目
+//          aud: token的客户
+//          exp: 经常使用的，以数字时间定义失效期，也就是当前时间以后的某个时间本token失效。
+//          nbf: 定义在此时间之前，JWT不会接受处理。
+//          iat: JWT发布时间，能用于决定JWT年龄
+//          jti: JWT唯一标识. 能用于防止 JWT重复使用，一次只用一个token
+
+          rc.response().putHeader("content-type", "application/json").end(
+                new JsonObject().put("token", token)
+                        .put("expToken", expToken).encode()
         );
       } else {
         rc.response().putHeader("content-type", "application/json")
