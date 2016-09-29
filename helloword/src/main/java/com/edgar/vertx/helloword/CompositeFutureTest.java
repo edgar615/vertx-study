@@ -14,6 +14,7 @@ import io.vertx.core.file.FileSystem;
 public class CompositeFutureTest {
   public static void main(String[] args) {
     Vertx vertx = Vertx.vertx();
+
     Future<String> future1 = Future.future();
     Future<String> future2 = Future.future();
     CompositeFuture future = CompositeFuture.all(future1, future2).setHandler(ar -> {
