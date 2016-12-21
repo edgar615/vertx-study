@@ -3,13 +3,13 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>vertx-study</artifactId>
+        <artifactId>vertx-service-proxy</artifactId>
         <groupId>com.edgar</groupId>
         <version>1.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>vertx-redis</artifactId>
+    <artifactId>service-proxy-consumer</artifactId>
 
     <dependencies>
         <dependency>
@@ -19,33 +19,29 @@
         </dependency>
         <dependency>
             <groupId>io.vertx</groupId>
+            <artifactId>vertx-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.vertx</groupId>
             <artifactId>vertx-unit</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
+            <groupId>io.vertx</groupId>
+            <artifactId>vertx-service-proxy</artifactId>
         </dependency>
         <dependency>
             <groupId>io.vertx</groupId>
-            <artifactId>vertx-core</artifactId>
+            <artifactId>vertx-codegen</artifactId>
         </dependency>
-
         <dependency>
             <groupId>io.vertx</groupId>
-            <artifactId>vertx-redis-client</artifactId>
+            <artifactId>vertx-hazelcast</artifactId>
         </dependency>
-
         <dependency>
             <groupId>com.edgar</groupId>
-            <artifactId>vertx-util</artifactId>
+            <artifactId>service-proxy-provider</artifactId>
             <version>1.0-SNAPSHOT</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.github.kstyrc</groupId>
-            <artifactId>embedded-redis</artifactId>
-            <version>0.6</version>
         </dependency>
     </dependencies>
 

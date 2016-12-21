@@ -1,0 +1,41 @@
+<html>
+<head>
+    <title></title>
+    <script src="http://cdn.jsdelivr.net/sockjs/1/sockjs.min.js"></script>
+    <script   type="application/javascript"
+              src="http://libs.baidu.com/jquery/1.9.1/jquery.min.js" ></script>
+    <script src="vertx-eventbus.js"></script>
+</head>
+
+<style>
+    .news {
+        font-size: 20pt;
+    }
+</style>
+
+<body>
+
+<div class="news">Latest news:</div>
+<br>
+
+<div id="status" class="news"></div>
+
+<script>
+    var eb = new EventBus("http://localhost:8080/eventbus");
+    eb.onopen = function () {
+        eb.registerHandler("news-feed", function (err, msg) {
+            var str = "<code>" + msg.body + "</code><br>";
+            $('#status').prepend(str);
+        });
+        eb.send("client-msg", "send ping", {}, function(error, msg) {
+            console.log("callback:" +  JSON.stringify(error)+ " " + JSON.stringify(msg));
+        });
+        eb.publish("client-msg", "publish ping", {});
+
+        //deny
+        eb.publish("client-msg2", "publish ping2", {});
+    }
+</script>
+
+</body>
+</html>

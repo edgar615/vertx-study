@@ -13,11 +13,11 @@ public class FutureExample {
     Future<String> future = Future.future();
     future.setHandler(ar -> {
       if (ar.succeeded()) {
-        throw new RuntimeException();
+        //do something
       } else {
         System.out.println("errr");
       }
     });
-    future.complete("haha");
+    future.complete("hello world");
   }
 }

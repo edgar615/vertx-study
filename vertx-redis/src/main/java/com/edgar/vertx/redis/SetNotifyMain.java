@@ -12,18 +12,10 @@ import java.util.Arrays;
  *
  * @author Edgar  Date 2016/3/8
  */
-public class RedisNotifyMain {
+public class SetNotifyMain {
   public static void main(String[] args) {
     Vertx vertx = Vertx.vertx();
-    vertx.eventBus().<JsonObject>consumer("io.vertx.redis.__keyevent@0__:expired", received -> {
-      JsonObject value = received.body().getJsonObject("value");
-      System.out.println(value);
-    });
-    vertx.eventBus().<JsonObject>consumer("io.vertx.redis.__keyevent@0__:del", received -> {
-      JsonObject value = received.body().getJsonObject("value");
-      System.out.println(value);
-    });
-    vertx.eventBus().<JsonObject>consumer("io.vertx.redis.__keyspace@0__:foo", received -> {
+    vertx.eventBus().<JsonObject>consumer("io.vertx.redis.__keyevent@0__:set", received -> {
       JsonObject value = received.body().getJsonObject("value");
       System.out.println(value);
     });
@@ -44,15 +36,9 @@ public class RedisNotifyMain {
 //        System.err.println("sub error" + res.cause().getMessage());
 //      }
 //    });
-    redisClient.subscribeMany(Arrays.asList("__keyevent@0__:expired", "__keyevent@0__:del"), res
+    redisClient.subscribeMany(Arrays.asList("__keyevent@0__:lpush","__keyevent@0__:set",
+                                            "__keyevent@0__:del"), res
             -> {
-      if (res.succeeded()) {
-        System.out.println("sub" + res.result());
-      } else {
-        System.err.println("sub error" + res.cause().getMessage());
-      }
-    });
-    redisClient.subscribe("__keyspace@0__:foo", res -> {
       if (res.succeeded()) {
         System.out.println("sub" + res.result());
       } else {

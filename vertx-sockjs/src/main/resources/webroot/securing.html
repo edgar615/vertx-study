@@ -1,0 +1,53 @@
+<html>
+<head>
+    <title></title>
+    <script src="http://cdn.jsdelivr.net/sockjs/1/sockjs.min.js"></script>
+    <script   type="application/javascript"
+              src="http://libs.baidu.com/jquery/1.9.1/jquery.min.js" ></script>
+    <script src="vertx-eventbus.js"></script>
+</head>
+
+<style>
+    .news {
+        font-size: 20pt;
+    }
+</style>
+
+<body>
+
+<div class="news">Latest news:</div>
+<br>
+
+<div id="status" class="news"></div>
+
+<script>
+    var eb = new EventBus("http://localhost:8080/eventbus");
+    eb.onopen = function () {
+        eb.registerHandler("ticker.mystock", function (err, msg) {
+            var str = "<code>" + msg.body + "</code><br>";
+            $('#status').prepend(str);
+        });
+        eb.registerHandler("news.feed", function (err, msg) {
+            var str = "<code>" + JSON.stringify(msg.body) + "</code><br>";
+            $('#status').prepend(str);
+        });
+        eb.registerHandler("news-feed ", function (err, msg) {
+            var str = "<code>" + msg.body + "</code><br>";
+            $('#status').prepend(str);
+        });
+        setInterval(function() {
+            eb.send("demo.orderMgr", "hi orderMgr");
+            eb.send("demo.rxdfereres", "hi rxdfereres");
+            eb.send("demo.persistor", {"action":"find"});
+            eb.send("demo.persistor", { "collection":"albums"});
+            eb.send("demo.persistor", {"action":"find2", "collection":"albums"});
+            eb.send("demo.persistor", {"action":"find", "collection":"albums2"});
+            eb.send("demo.persistor", {"action":"find", "collection":"albums"});
+            eb.send("demo.persistor", {"action":"find", "collection":"albums", "foo" : "bar"});
+        }, 1000)
+
+    }
+</script>
+
+</body>
+</html>

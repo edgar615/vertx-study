@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SockJs测试</title>
+    <script src="http://cdn.jsdelivr.net/sockjs/1/sockjs.min.js"></script>
+    <script   type="application/javascript"
+            src="http://libs.baidu.com/jquery/1.9.1/jquery.min.js" ></script>
+    <script>
+        $(function () {
+            var sock = new SockJS('http://localhost:8080/myapp');
+
+            sock.onopen = function () {
+                console.log('open');
+            };
+
+            sock.onmessage = function (e) {
+                console.log('message', e.data);
+            };
+
+            sock.onclose = function () {
+                console.log('close');
+            };
+
+            setTimeout(function() {
+                sock.send('test');
+            }, 2000);
+            setTimeout(function() {
+                sock.close();
+            }, 5000);
+
+        });
+    </script>
+</head>
+<body>
+aaaa
+</body>
+</html>

@@ -1,4 +1,4 @@
-package com.edgar.vertx.helloword;
+package com.edgar.vertx.future;
 
 import io.vertx.core.CompositeFuture;
 import io.vertx.core.Future;
