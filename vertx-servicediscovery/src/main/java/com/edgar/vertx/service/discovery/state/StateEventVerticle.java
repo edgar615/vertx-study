@@ -23,24 +23,23 @@ public class StateEventVerticle extends AbstractVerticle {
   public void start() throws Exception {
     ServiceDiscovery discovery = ServiceDiscovery.create(vertx);
     vertx.eventBus().consumer("vertx.discovery.announce", msg -> {
-          System.out.println(msg.body());
-      });
+      System.out.println("announce: " + msg.body());
+    });
 
-      vertx.eventBus().consumer("vertx.discovery.usage", msg -> {
-          System.out.println(msg.body());
-      });
+    vertx.eventBus().consumer("vertx.discovery.usage", msg -> {
+      System.out.println("usage: " + msg.body());
+    });
 
-      vertx.setPeriodic(5000, l -> {
-          discovery.getRecords(r -> true, ar -> {
-              List<Record> records = ar.result();
-              for (Record record : records) {
-                  System.out.println(record);
-                  ServiceReference serviceReference = discovery.getReference(record);
-                  HttpClient httpClient = serviceReference.get();
-                  serviceReference.release();
-              }
-          });
+    vertx.setPeriodic(5000, l -> {
+      discovery.getRecords(r -> true, ar -> {
+        List<Record> records = ar.result();
+        for (Record record : records) {
+          ServiceReference serviceReference = discovery.getReference(record);
+          HttpClient httpClient = serviceReference.get();
+          serviceReference.release();
+        }
       });
+    });
     discovery.close();
   }
 }

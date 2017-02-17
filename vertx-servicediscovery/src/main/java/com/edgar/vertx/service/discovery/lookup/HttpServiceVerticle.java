@@ -5,6 +5,7 @@ import io.vertx.core.Launcher;
 import io.vertx.core.json.JsonObject;
 import io.vertx.servicediscovery.Record;
 import io.vertx.servicediscovery.ServiceDiscovery;
+import io.vertx.servicediscovery.Status;
 import io.vertx.servicediscovery.types.HttpEndpoint;
 
 import java.util.HashMap;
@@ -24,7 +25,7 @@ public class HttpServiceVerticle extends AbstractVerticle {
     public void start() throws Exception {
         ServiceDiscovery discovery = ServiceDiscovery.create(vertx);
 
-        Record httpRecord = HttpEndpoint.createRecord("some-rest-api1", "localhost", 8080, "/api");
+        Record httpRecord = HttpEndpoint.createRecord("some-rest-api1", "localhost", 8081, "/api");
         discovery.publish(httpRecord, ar -> {
             if (ar.succeeded()) {
                 Record publishedRecord = ar.result();
@@ -35,7 +36,10 @@ public class HttpServiceVerticle extends AbstractVerticle {
             }
         });
 
-        Record httpRecord2 = HttpEndpoint.createRecord("some-rest-api2", "localhost", 8080, "/api", new JsonObject().put("color", "red"));
+        Record httpRecord2 = HttpEndpoint.createRecord("some-rest-api2", "localhost", 8082,
+                                                       "/api", new JsonObject().put("color",
+                                                                                    "red"))
+                .setStatus(Status.DOWN);
         discovery.publish(httpRecord2, ar -> {
             if (ar.succeeded()) {
                 Record publishedRecord = ar.result();
@@ -46,7 +50,8 @@ public class HttpServiceVerticle extends AbstractVerticle {
             }
         });
 
-        Record httpRecord3 = HttpEndpoint.createRecord("some-rest-api3", "localhost", 8080, "/api", new JsonObject().put("color", "white"));
+        Record httpRecord3 = HttpEndpoint.createRecord("some-rest-api3", "localhost", 8083,
+                                                       "/api", new JsonObject().put("color", "white"));
         discovery.publish(httpRecord3, ar -> {
             if (ar.succeeded()) {
                 Record publishedRecord = ar.result();
@@ -57,7 +62,8 @@ public class HttpServiceVerticle extends AbstractVerticle {
             }
         });
 
-        Record httpRecord4 = HttpEndpoint.createRecord("some-rest-api1", "localhost", 8080, "/api", new JsonObject().put("num", 1));
+        Record httpRecord4 = HttpEndpoint.createRecord("some-rest-api4", "localhost", 8084,
+                                                       "/api", new JsonObject().put("num", 1));
         discovery.publish(httpRecord4, ar -> {
             if (ar.succeeded()) {
                 Record publishedRecord = ar.result();

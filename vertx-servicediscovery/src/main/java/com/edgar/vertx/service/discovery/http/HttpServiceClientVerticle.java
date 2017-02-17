@@ -30,15 +30,16 @@ public class HttpServiceClientVerticle extends AbstractVerticle {
         System.out.println(record.getLocation());
         ServiceReference serviceReference = discovery.getReference(record);
         HttpClient httpClient = serviceReference.get();
+        System.out.println("before release:" + (httpClient == serviceReference.get()));
         // You need to path the complete path
-        httpClient.getNow("/api/persons", response -> {
-
-          // ...
-
+        httpClient.get(record.getLocation().getString("root"), response -> {
           // Dont' forget to release the service
           serviceReference.release();
-
-        });
+          System.out.println("after release:" + (httpClient == serviceReference.get()));
+        }).exceptionHandler(t -> {
+          serviceReference.release();
+          System.out.println("after release:" + (httpClient == serviceReference.get()));
+        }).end();
       }
     });
     discovery.close();
