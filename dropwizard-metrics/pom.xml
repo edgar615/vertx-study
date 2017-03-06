@@ -39,7 +39,7 @@
         <dependency>
             <groupId>io.vertx</groupId>
             <artifactId>vertx-dropwizard-metrics</artifactId>
-            <version>3.2.1</version>
+            <version>${vertx.version}</version>
         </dependency>
     </dependencies>
 </project>

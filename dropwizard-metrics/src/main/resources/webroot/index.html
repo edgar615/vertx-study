@@ -16,7 +16,7 @@
 <html>
 <head>
     <script src="//cdn.bootcss.com/jquery/2.1.1/jquery.min.js"></script>
-    <script src="//cdn.jsdelivr.net/sockjs/0.3.4/sockjs.min.js"></script>
+    <script src="http://cdn.jsdelivr.net/sockjs/1/sockjs.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highcharts/4.1.7/highcharts.js"></script></head>
 <script src="vertx-eventbus.js"></script>
 <body>
@@ -43,6 +43,7 @@
                     eb.onopen = function() {
                         eb.registerHandler("metrics", function(err, res) {
                             var x = (new Date()).getTime(); // current time
+                            console.log(res);
                             var sent = res.body["messages.sent"];
                             if (sent != null) {
                                 sentSeries.addPoint([x, sent.oneSecondRate], false, true);
