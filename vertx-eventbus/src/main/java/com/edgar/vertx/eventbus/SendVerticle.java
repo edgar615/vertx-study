@@ -16,14 +16,14 @@ public class SendVerticle extends AbstractVerticle {
                 .send("com.edgar.vertx.test", "hello world", new DeliveryOptions().setSendTimeout
                               (1000),
                       (AsyncResult<Message<String>>
-                                                                            ar2)
-                        -> {
-                  if (ar2.succeeded()) {
-                    System.out.println(ar2.result().body());
-                  } else {
-                    System.err.println(ar2.cause().getMessage());
-                  }
-                });
+                               ar2)
+                              -> {
+                        if (ar2.succeeded()) {
+                          System.out.println(ar2.result().body());
+                        } else {
+                          System.err.println(ar2.cause().getMessage());
+                        }
+                      });
       }
     });
 

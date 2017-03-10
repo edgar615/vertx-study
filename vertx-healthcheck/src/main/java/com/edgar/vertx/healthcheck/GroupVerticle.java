@@ -22,9 +22,10 @@ public class GroupVerticle extends AbstractVerticle {
 
     Router router = Router.router(vertx);
     router.get("/health").handler(healthCheckHandler);
+    router.get("/health/*").handler(healthCheckHandler);
 
     healthCheckHandler.register("a-group/my-procedure-name", future -> {
-//      future.complete(Status.OK());
+      future.complete(Status.OK());
 //      future.fail("undefined error");
     });
 
