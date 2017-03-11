@@ -36,6 +36,7 @@
         <module>vertx-service-proxy</module>
         <module>vertx-sockjs</module>
         <module>vertx-healthcheck</module>
+        <module>vertx-kafka</module>
     </modules>
 
     <properties>
