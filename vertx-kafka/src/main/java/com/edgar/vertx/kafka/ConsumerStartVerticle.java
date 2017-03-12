@@ -52,7 +52,7 @@ public class ConsumerStartVerticle extends AbstractVerticle {
       }
     });
 
-    consumer.subscribe("the_topic", ar -> {
+    consumer.subscribe("test", ar -> {
       if (ar.succeeded()) {
         System.out.println("subscribed");
       } else {
