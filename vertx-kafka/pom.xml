@@ -18,5 +18,23 @@
             <artifactId>vertx-kafka-client</artifactId>
             <version>${vertx.version}</version>
         </dependency>
+
+        <!-- For running Kafka easily -->
+        <dependency>
+            <groupId>io.debezium</groupId>
+            <artifactId>debezium-core</artifactId>
+            <version>0.3.1</version>
+        </dependency>
+        <dependency>
+            <groupId>io.debezium</groupId>
+            <artifactId>debezium-core</artifactId>
+            <version>0.3.1</version>
+            <type>test-jar</type>
+        </dependency>
+
+        <dependency>
+            <groupId>io.vertx</groupId>
+            <artifactId>vertx-web</artifactId>
+        </dependency>
     </dependencies>
 </project>

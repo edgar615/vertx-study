@@ -6,15 +6,17 @@ import io.vertx.kafka.client.common.TopicPartition;
 import io.vertx.kafka.client.consumer.KafkaConsumer;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by edgar on 17-3-11.
  */
-public class ConsumerStartVerticle extends AbstractVerticle {
+public class ReceiveTopicPartitionVerticle extends AbstractVerticle {
 
   public static void main(String[] args) {
-    Vertx.vertx().deployVerticle(ConsumerStartVerticle.class.getName());
+    Vertx.vertx().deployVerticle(ReceiveTopicPartitionVerticle.class.getName());
   }
 
 
@@ -36,35 +38,28 @@ public class ConsumerStartVerticle extends AbstractVerticle {
           ",partition=" + record.partition() + ",offset=" + record.offset());
     });
     // registering handlers for assigned and revoked partitions
-    consumer.partitionsAssignedHandler(topicPartitions -> {
+    Set<TopicPartition> topicPartitions = new HashSet<>();
+    topicPartitions.add(new TopicPartition()
+        .setTopic("test")
+        .setPartition(0));
 
-      System.out.println("Partitions assigned");
-      for (TopicPartition topicPartition : topicPartitions) {
-        System.out.println(topicPartition.getTopic() + " " + topicPartition.getPartition());
+// requesting to be assigned the specific partition
+    consumer.assign(topicPartitions, done -> {
+
+      if (done.succeeded()) {
+        System.out.println("Partition assigned");
+
+        // requesting the assigned partitions
+        consumer.assignment(done1 -> {
+
+          if (done1.succeeded()) {
+
+            for (TopicPartition topicPartition : done1.result()) {
+              System.out.println(topicPartition.getTopic() + " " + topicPartition.getPartition());
+            }
+          }
+        });
       }
     });
-
-    consumer.partitionsRevokedHandler(topicPartitions -> {
-
-      System.out.println("Partitions revoked");
-      for (TopicPartition topicPartition : topicPartitions) {
-        System.out.println(topicPartition.getTopic() + " " + topicPartition.getPartition());
-      }
-    });
-
-    consumer.subscribe("the_topic", ar -> {
-      if (ar.succeeded()) {
-        System.out.println("subscribed");
-      } else {
-        System.out.println("Could not subscribe " + ar.cause().getMessage());
-      }
-    });
-
-//    consumer.unsubscribe(ar -> {
-//
-//      if (ar.succeeded()) {
-//        System.out.println("Consumer unsubscribed");
-//      }
-//    });
   }
 }

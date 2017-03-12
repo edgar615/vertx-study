@@ -2,19 +2,22 @@ package com.edgar.vertx.kafka;
 
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Vertx;
+import io.vertx.kafka.client.common.PartitionInfo;
 import io.vertx.kafka.client.common.TopicPartition;
 import io.vertx.kafka.client.consumer.KafkaConsumer;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by edgar on 17-3-11.
  */
-public class ConsumerStartVerticle extends AbstractVerticle {
+public class PartitionForVerticle extends AbstractVerticle {
 
   public static void main(String[] args) {
-    Vertx.vertx().deployVerticle(ConsumerStartVerticle.class.getName());
+    Vertx.vertx().deployVerticle(PartitionForVerticle.class.getName());
   }
 
 
@@ -30,41 +33,18 @@ public class ConsumerStartVerticle extends AbstractVerticle {
 
 // use consumer for interacting with Apache Kafka
     KafkaConsumer<String, String> consumer = KafkaConsumer.create(vertx, config);
-
     consumer.handler(record -> {
       System.out.println("Processing key=" + record.key() + ",value=" + record.value() +
           ",partition=" + record.partition() + ",offset=" + record.offset());
     });
-    // registering handlers for assigned and revoked partitions
-    consumer.partitionsAssignedHandler(topicPartitions -> {
+    consumer.partitionsFor("test", ar -> {
 
-      System.out.println("Partitions assigned");
-      for (TopicPartition topicPartition : topicPartitions) {
-        System.out.println(topicPartition.getTopic() + " " + topicPartition.getPartition());
-      }
-    });
-
-    consumer.partitionsRevokedHandler(topicPartitions -> {
-
-      System.out.println("Partitions revoked");
-      for (TopicPartition topicPartition : topicPartitions) {
-        System.out.println(topicPartition.getTopic() + " " + topicPartition.getPartition());
-      }
-    });
-
-    consumer.subscribe("the_topic", ar -> {
       if (ar.succeeded()) {
-        System.out.println("subscribed");
-      } else {
-        System.out.println("Could not subscribe " + ar.cause().getMessage());
+
+        for (PartitionInfo partitionInfo : ar.result()) {
+          System.out.println(partitionInfo);
+        }
       }
     });
-
-//    consumer.unsubscribe(ar -> {
-//
-//      if (ar.succeeded()) {
-//        System.out.println("Consumer unsubscribed");
-//      }
-//    });
   }
 }

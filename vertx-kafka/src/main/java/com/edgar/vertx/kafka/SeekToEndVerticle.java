@@ -2,19 +2,21 @@ package com.edgar.vertx.kafka;
 
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Vertx;
+import io.vertx.kafka.client.common.PartitionInfo;
 import io.vertx.kafka.client.common.TopicPartition;
 import io.vertx.kafka.client.consumer.KafkaConsumer;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
  * Created by edgar on 17-3-11.
  */
-public class ConsumerStartVerticle extends AbstractVerticle {
+public class SeekToEndVerticle extends AbstractVerticle {
 
   public static void main(String[] args) {
-    Vertx.vertx().deployVerticle(ConsumerStartVerticle.class.getName());
+    Vertx.vertx().deployVerticle(SeekToEndVerticle.class.getName());
   }
 
 
@@ -30,17 +32,31 @@ public class ConsumerStartVerticle extends AbstractVerticle {
 
 // use consumer for interacting with Apache Kafka
     KafkaConsumer<String, String> consumer = KafkaConsumer.create(vertx, config);
-
     consumer.handler(record -> {
       System.out.println("Processing key=" + record.key() + ",value=" + record.value() +
           ",partition=" + record.partition() + ",offset=" + record.offset());
     });
-    // registering handlers for assigned and revoked partitions
+
+    consumer.subscribe("test", ar -> {
+      if (ar.succeeded()) {
+        System.out.println("subscribed");
+      } else {
+        System.out.println("Could not subscribe " + ar.cause().getMessage());
+      }
+    });
+
     consumer.partitionsAssignedHandler(topicPartitions -> {
 
       System.out.println("Partitions assigned");
       for (TopicPartition topicPartition : topicPartitions) {
         System.out.println(topicPartition.getTopic() + " " + topicPartition.getPartition());
+
+        consumer.seekToEnd(Collections.singleton(topicPartition), ar -> {
+
+          if (ar.succeeded()) {
+            System.out.println("Seeking done");
+          }
+        });
       }
     });
 
@@ -51,19 +67,14 @@ public class ConsumerStartVerticle extends AbstractVerticle {
         System.out.println(topicPartition.getTopic() + " " + topicPartition.getPartition());
       }
     });
-
-    consumer.subscribe("the_topic", ar -> {
-      if (ar.succeeded()) {
-        System.out.println("subscribed");
-      } else {
-        System.out.println("Could not subscribe " + ar.cause().getMessage());
-      }
-    });
-
-//    consumer.unsubscribe(ar -> {
+//
+//    TopicPartition topicPartition = new TopicPartition()
+//        .setPartition(0)
+//        .setTopic("test");
+//    consumer.seekToEnd(Collections.singleton(topicPartition), ar -> {
 //
 //      if (ar.succeeded()) {
-//        System.out.println("Consumer unsubscribed");
+//        System.out.println("Seeking done");
 //      }
 //    });
   }

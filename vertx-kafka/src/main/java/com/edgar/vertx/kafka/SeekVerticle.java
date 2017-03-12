@@ -5,16 +5,17 @@ import io.vertx.core.Vertx;
 import io.vertx.kafka.client.common.TopicPartition;
 import io.vertx.kafka.client.consumer.KafkaConsumer;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
  * Created by edgar on 17-3-11.
  */
-public class ConsumerStartVerticle extends AbstractVerticle {
+public class SeekVerticle extends AbstractVerticle {
 
   public static void main(String[] args) {
-    Vertx.vertx().deployVerticle(ConsumerStartVerticle.class.getName());
+    Vertx.vertx().deployVerticle(SeekVerticle.class.getName());
   }
 
 
@@ -24,23 +25,28 @@ public class ConsumerStartVerticle extends AbstractVerticle {
     config.put("bootstrap.servers", "localhost:9092");
     config.put("key.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
     config.put("value.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
-    config.put("group.id", "my_group");
+    config.put("group.id", "my_group1");
     config.put("auto.offset.reset", "earliest");
     config.put("enable.auto.commit", "false");
 
 // use consumer for interacting with Apache Kafka
     KafkaConsumer<String, String> consumer = KafkaConsumer.create(vertx, config);
-
     consumer.handler(record -> {
       System.out.println("Processing key=" + record.key() + ",value=" + record.value() +
           ",partition=" + record.partition() + ",offset=" + record.offset());
     });
-    // registering handlers for assigned and revoked partitions
+
     consumer.partitionsAssignedHandler(topicPartitions -> {
 
       System.out.println("Partitions assigned");
       for (TopicPartition topicPartition : topicPartitions) {
         System.out.println(topicPartition.getTopic() + " " + topicPartition.getPartition());
+        consumer.seek(topicPartition, 10,  ar -> {
+
+          if (ar.succeeded()) {
+            System.out.println("Seeking done");
+          }
+        });
       }
     });
 
@@ -52,7 +58,7 @@ public class ConsumerStartVerticle extends AbstractVerticle {
       }
     });
 
-    consumer.subscribe("the_topic", ar -> {
+    consumer.subscribe("test", ar -> {
       if (ar.succeeded()) {
         System.out.println("subscribed");
       } else {
@@ -60,10 +66,13 @@ public class ConsumerStartVerticle extends AbstractVerticle {
       }
     });
 
-//    consumer.unsubscribe(ar -> {
+//    TopicPartition topicPartition = new TopicPartition()
+//        .setPartition(0)
+//        .setTopic("test");
+//    consumer.seek(topicPartition, 10,  ar -> {
 //
 //      if (ar.succeeded()) {
-//        System.out.println("Consumer unsubscribed");
+//        System.out.println("Seeking done");
 //      }
 //    });
   }

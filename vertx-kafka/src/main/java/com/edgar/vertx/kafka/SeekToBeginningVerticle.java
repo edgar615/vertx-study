@@ -5,16 +5,17 @@ import io.vertx.core.Vertx;
 import io.vertx.kafka.client.common.TopicPartition;
 import io.vertx.kafka.client.consumer.KafkaConsumer;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
  * Created by edgar on 17-3-11.
  */
-public class ConsumerStartVerticle extends AbstractVerticle {
+public class SeekToBeginningVerticle extends AbstractVerticle {
 
   public static void main(String[] args) {
-    Vertx.vertx().deployVerticle(ConsumerStartVerticle.class.getName());
+    Vertx.vertx().deployVerticle(SeekToBeginningVerticle.class.getName());
   }
 
 
@@ -30,29 +31,12 @@ public class ConsumerStartVerticle extends AbstractVerticle {
 
 // use consumer for interacting with Apache Kafka
     KafkaConsumer<String, String> consumer = KafkaConsumer.create(vertx, config);
-
     consumer.handler(record -> {
       System.out.println("Processing key=" + record.key() + ",value=" + record.value() +
           ",partition=" + record.partition() + ",offset=" + record.offset());
     });
-    // registering handlers for assigned and revoked partitions
-    consumer.partitionsAssignedHandler(topicPartitions -> {
 
-      System.out.println("Partitions assigned");
-      for (TopicPartition topicPartition : topicPartitions) {
-        System.out.println(topicPartition.getTopic() + " " + topicPartition.getPartition());
-      }
-    });
-
-    consumer.partitionsRevokedHandler(topicPartitions -> {
-
-      System.out.println("Partitions revoked");
-      for (TopicPartition topicPartition : topicPartitions) {
-        System.out.println(topicPartition.getTopic() + " " + topicPartition.getPartition());
-      }
-    });
-
-    consumer.subscribe("the_topic", ar -> {
+    consumer.subscribe("test", ar -> {
       if (ar.succeeded()) {
         System.out.println("subscribed");
       } else {
@@ -60,11 +44,14 @@ public class ConsumerStartVerticle extends AbstractVerticle {
       }
     });
 
-//    consumer.unsubscribe(ar -> {
-//
-//      if (ar.succeeded()) {
-//        System.out.println("Consumer unsubscribed");
-//      }
-//    });
+    TopicPartition topicPartition = new TopicPartition()
+        .setPartition(0)
+        .setTopic("test");
+    consumer.seekToBeginning(Collections.singleton(topicPartition), ar -> {
+
+      if (ar.succeeded()) {
+        System.out.println("Seeking done");
+      }
+    });
   }
 }

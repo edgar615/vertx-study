@@ -2,6 +2,7 @@ package com.edgar.vertx.kafka;
 
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Vertx;
+import io.vertx.kafka.client.common.PartitionInfo;
 import io.vertx.kafka.client.producer.KafkaProducer;
 import io.vertx.kafka.client.producer.KafkaProducerRecord;
 import io.vertx.kafka.client.producer.RecordMetadata;
@@ -36,6 +37,17 @@ public class ProducerStartVerticle extends AbstractVerticle {
       KafkaProducerRecord<String, String> record =
           KafkaProducerRecord.create("test", "message_" + i);
 
+      //You can call the partitionsFor to get information about partitions for a specified topic:
+      producer.partitionsFor("test", ar -> {
+
+        if (ar.succeeded()) {
+
+          for (PartitionInfo partitionInfo : ar.result()) {
+            System.out.println(partitionInfo);
+          }
+        }
+      });
+
       producer.write(record, done -> {
 
         if (done.succeeded()) {
@@ -48,5 +60,13 @@ public class ProducerStartVerticle extends AbstractVerticle {
 
       });
     }
+
+    producer.close(res -> {
+      if (res.succeeded()) {
+        System.out.println("Producer is now closed");
+      } else {
+        System.out.println("close failed");
+      }
+    });
   }
 }
