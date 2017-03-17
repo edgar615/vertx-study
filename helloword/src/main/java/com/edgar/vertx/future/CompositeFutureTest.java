@@ -20,8 +20,8 @@ public class CompositeFutureTest {
     CompositeFuture future = CompositeFuture.all(future1, future2).setHandler(ar -> {
       if (ar.succeeded()) {
         CompositeFuture f = ar.result();
-        System.out.println(f.result(0).toString());
-        System.out.println(f.result(1).toString());
+        System.out.println(f.resultAt(0).toString());
+        System.out.println(f.resultAt(1).toString());
       } else {
         System.err.println("error" + ar.cause().getMessage());
       }

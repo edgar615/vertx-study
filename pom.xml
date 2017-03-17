@@ -37,6 +37,7 @@
         <module>vertx-sockjs</module>
         <module>vertx-healthcheck</module>
         <module>vertx-kafka</module>
+        <module>vertx-consul</module>
     </modules>
 
     <properties>
