@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"/>
+</head>
+<body>
+<div class="page-container">
+    <!-- Content -->
+
+    <div id="noop-content">
+        <h1>noop:</h1>
+    </div>
+
+    <div id="with-content">
+        <h1>with:</h1>
+    </div>
+
+    <div id="each-content">
+        <h1>each:</h1>
+    </div>
+
+    <div id="if-content">
+        <h1>if:</h1>
+    </div>
+
+    <div id="if-else-content">
+        <h1>if:</h1>
+    </div>
+
+    <div id="if-elseif-content">
+        <h1>if:</h1>
+    </div>
+
+    <div id="each-this-content">
+        <h1>each-this:</h1>
+    </div>
+
+    <div id="each-else-content">
+        <h1>each-else:</h1>
+    </div>
+
+    <div id="each-index-content">
+        <h1>each-index:</h1>
+    </div>
+
+    <div id="each-key-content">
+        <h1>each-key:</h1>
+    </div>
+
+    <div id="each-first-content">
+        <h1>each-first:</h1>
+    </div>
+    <!-- /Content -->
+</div>
+
+<script src="//cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
+<script src="//cdn.bootcss.com/handlebars.js/4.0.6/handlebars.min.js"></script>
+
+<script id="noop-template" type="text/x-handlebars-template">
+    <div class="entry">
+        <h1>{{title}}</h1>
+        <div class="body">
+            {{#noop}}{{body}}{{/noop}}
+        </div>
+    </div>
+</script>
+
+<script id="bold-template" type="text/x-handlebars-template">
+    <div class="entry">
+        <h1>{{title}}</h1>
+        <div class="body">
+            {{#bold}}{{body}}{{/bold}}
+        </div>
+    </div>
+</script>
+
+<script id="with-template" type="text/x-handlebars-template">
+    <div class="entry">
+        <h1>{{title}}</h1>
+        {{#with story}}
+        <div class="intro">{{{intro}}}</div>
+        <div class="body">{{{body}}}</div>
+        {{/with}}
+    </div>
+</script>
+
+<script id="each-template" type="text/x-handlebars-template">
+    <div class="entry">
+        <h1>{{title}}</h1>
+        {{#with story}}
+        <div class="intro">{{{intro}}}</div>
+        <div class="body">{{{body}}}</div>
+        {{/with}}
+    </div>
+    <div class="comments">
+        {{#each comments}}
+        <div class="comment">
+            <h2>{{subject}}</h2>
+            {{{body}}}
+        </div>
+        {{/each}}
+    </div>
+</script>
+
+<script id="if-template" type="text/x-handlebars-template">
+    Active?
+    {{#if isActive}}
+    Active
+    {{/if}}
+</script>
+
+<script id="if-else-template" type="text/x-handlebars-template">
+    Active?
+    {{#if isActive}}
+    <img src="star.gif" alt="Active">
+    {{else}}
+    <img src="cry.gif" alt="Inactive">
+    {{/if}}
+</script>
+
+<script id="if-elseif-template" type="text/x-handlebars-template">
+    Active?
+    {{#if isActive}}
+    <img src="star.gif" alt="Active">
+    {{else if isInactive}}
+    <img src="cry.gif" alt="Inactive">
+    {{/if}}
+</script>
+
+<script id="each-this-template" type="text/x-handlebars-template">
+    <ul class="people_list">
+        {{#each people}}
+        <li>{{this}}</li>
+        {{/each}}
+    </ul>
+</script>
+
+<script id="each-else-template" type="text/x-handlebars-template">
+    {{#each paragraphs}}
+    <p>{{this}}</p>
+    {{else}}
+    <p class="empty">No content</p>
+    {{/each}}
+</script>
+
+<script id="each-index-template" type="text/x-handlebars-template">
+    <ul class="people_list">
+        {{#each people}}
+        <li>{{@index}}:{{this}}</li>
+        {{/each}}
+    </ul>
+</script>
+
+<script id="each-key-template" type="text/x-handlebars-template">
+    <ul class="people_list">
+        {{#each people}}
+        <li>{{@key}}:{{this}}</li>
+        {{/each}}
+    </ul>
+</script>
+
+<script id="each-first-template" type="text/x-handlebars-template">
+    <ul class="people_list">
+        {{#each people}}
+        <li>
+            {{#if @first}}
+                 第一个
+            {{/if}}
+            {{#if @last}}
+                最后一个
+            {{/if}}
+            {{this}}
+        </li>
+        {{/each}}
+    </ul>
+</script>
+
+<script>
+    Handlebars.registerHelper('list', function(context, options) {
+        var attrs = '';
+        for(var i=0,l=options.hash.length;i<l;i++) {
+            for (var key in options.hash[i]) {
+                attrs += key + "=" + options.hash[key] + " ";
+            }
+        }
+        return attrs;
+//        return "<ul " + attrs + ">" + context.map(function(item) {
+//                    return "<li>" + options.fn(item) + "</li>";
+//                }).join("\n") + "</ul>";
+    });
+</script>
+
+<script>
+    var context = {title: "My New Post", body: "This is my first post!"};
+    var source   = $("#noop-template").html();
+    var template = Handlebars.compile(source);
+    $('#noop-content').append(template(context));
+
+    var context = {
+        title: "First Post",
+        story: {
+            intro: "Before the jump",
+            body: "After the jump"
+        }
+    }
+    var source   = $("#with-template").html();
+    var template = Handlebars.compile(source);
+    $('#with-content').append(template(context));
+
+
+    var context = {
+        title: "First Post",
+        story: {
+            intro: "Before the jump",
+            body: "After the jump"
+        },
+        comments: [{
+            author: {firstName: "Yehuda", lastName: "Katz"},
+            body: "Me too!"
+        }]
+    };
+    var source   = $("#each-template").html();
+    var template = Handlebars.compile(source);
+    $('#each-content').append(template(context));
+
+    var source   = $("#if-template").html();
+    var template = Handlebars.compile(source);
+    $('#if-content').append(template({isActive : true}));
+
+    var source   = $("#if-else-template").html();
+    var template = Handlebars.compile(source);
+    $('#if-else-content').append(template({isActive : false}));
+
+
+    var source   = $("#if-elseif-template").html();
+    var template = Handlebars.compile(source);
+    $('#if-elseif-content').append(template({isActive : false}));
+
+    var context = {
+        people: [
+            "Yehuda Katz",
+            "Alan Johnson",
+            "Charles Jolley"
+        ]
+    };
+    var source   = $("#each-this-template").html();
+    var template = Handlebars.compile(source);
+    $('#each-this-content').append(template(context));
+
+    var context = {
+        paragraphs: [
+        ]
+    };
+    var source   = $("#each-else-template").html();
+    var template = Handlebars.compile(source);
+    $('#each-else-content').append(template(context));
+
+    var context = {
+        people: [
+            "Yehuda Katz",
+            "Alan Johnson",
+            "Charles Jolley"
+        ]
+    };
+    var source   = $("#each-index-template").html();
+    var template = Handlebars.compile(source);
+    $('#each-index-content').append(template(context));
+
+    var source   = $("#each-key-template").html();
+    var template = Handlebars.compile(source);
+    $('#each-key-content').append(template(context));
+
+    var source   = $("#each-first-template").html();
+    var template = Handlebars.compile(source);
+    $('#each-first-content').append(template(context));
+</script>
+
+</body>
+</html>

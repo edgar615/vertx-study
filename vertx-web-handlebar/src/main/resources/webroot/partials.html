@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"/>
+</head>
+<body>
+<div class="page-container">
+    <!-- Content -->
+
+    <div id="partial-content">
+        <h1>partial:</h1>
+    </div>
+
+    <div id="parameter-content">
+        <h1>parameter:</h1>
+    </div>
+
+    <div id="Failover-content">
+        <h1>Failover:</h1>
+    </div>
+
+    <div id="layout-content">
+        <h1>layout:</h1>
+    </div>
+
+    <div id="layout2-content">
+        <h1>layout2:</h1>
+    </div>
+    <!-- /Content -->
+</div>
+
+<script src="//cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
+<script src="//cdn.bootcss.com/handlebars.js/4.0.6/handlebars.min.js"></script>
+
+<script id="partial-template" type="text/x-handlebars-template">
+    {{> myPartial }}
+</script>
+
+<script id="parameter-template" type="text/x-handlebars-template">
+    {{> myPartial name="hello"}}
+</script>
+
+<script id="Failover-template" type="text/x-handlebars-template">
+    {{#> myPartial2 }}
+    Failover content
+    {{/myPartial2}}
+</script>
+
+<script id="layout-template" type="text/x-handlebars-template">
+    {{#> layout }}
+    My Content
+    {{/layout}}
+</script>
+
+<script id="layout2-template" type="text/x-handlebars-template">
+    {{#> layout}}
+    {{#*inline "nav"}}
+    My Nav
+    {{/inline}}
+    {{#*inline "content"}}
+    My Content
+    {{/inline}}
+    {{/layout}}
+</script>
+
+<script>
+    Handlebars.registerPartial('myPartial', '{{name}}');
+    Handlebars.registerPartial('layout', 'Site Content <br/>{{> @partial-block }}');
+    Handlebars.registerPartial('nav', 'nav');
+    Handlebars.registerPartial('content', 'content');
+    Handlebars.registerPartial('layout2', '<div class="nav">'
+    + '{{> nav}}'
+    + '</div>'
+    + '<div class="content">'
+    + '{{> content}}'
+    + '</div>');
+</script>
+
+<script>
+    var context = {name: "My New Post", body: "This is my first post!"};
+    var source   = $("#partial-template").html();
+    var template = Handlebars.compile(source);
+    $('#partial-content').append(template(context));
+
+    var context = {name: "My New Post", body: "This is my first post!"};
+    var source   = $("#parameter-template").html();
+    var template = Handlebars.compile(source);
+    $('#parameter-content').append(template(context));
+
+    var context = {title: "My New Post", body: "This is my first post!"};
+    var source   = $("#Failover-template").html();
+    var template = Handlebars.compile(source);
+    $('#Failover-content').append(template(context));
+
+    var context = {title: "My New Post", body: "This is my first post!"};
+    var source   = $("#layout-template").html();
+    var template = Handlebars.compile(source);
+    $('#layout-content').append(template(context));
+
+    var context = {title: "My New Post", body: "This is my first post!"};
+    var source   = $("#layout2-template").html();
+    var template = Handlebars.compile(source);
+    $('#layout2-content').append(template(context));
+</script>
+
+</body>
+</html>

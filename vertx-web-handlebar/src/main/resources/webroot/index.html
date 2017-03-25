@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"/>
+</head>
+<body>
+<div class="page-container">
+    <!-- Content -->
+
+    <div id="entry-content">
+        <h1>hello world:</h1>
+    </div>
+
+    <div id="escaping-content">
+        <h1>escaping html:</h1>
+    </div>
+
+    <div id="list-content">
+        <h1>list helper:</h1>
+    </div>
+
+    <div id="simple-path-content">
+        <h1>simple-path:</h1>
+    </div>
+
+    <div id="helper-content">
+        <h1>helper:</h1>
+    </div>
+
+    <div id="helper2-content">
+        <h1>helper2:</h1>
+    </div>
+
+    <div id="partials-content">
+        <h1>Partials:</h1>
+    </div>
+    <!-- /Content -->
+</div>
+
+<script src="//cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
+<script src="//cdn.bootcss.com/handlebars.js/4.0.6/handlebars.min.js"></script>
+
+<script id="entry-template" type="text/x-handlebars-template">
+    {{! This comment will not be in the output }}
+    <!-- This comment will be in the output -->
+    <div class="entry">
+        <h1>{{title}}</h1>
+        <div class="body">
+            {{body}}
+        </div>
+    </div>
+</script>
+
+<script id="escaping-template" type="text/x-handlebars-template">
+    <div class="entry">
+        <h1>{{title}}</h1>
+        <div class="body">
+            {{{body}}}
+        </div>
+    </div>
+</script>
+
+<script id="list-template" type="text/x-handlebars-template">
+    {{#list people}} {{firstName}} {{lastName}}{{/list}}
+</script>
+
+<script id="simple-path-template" type="text/x-handlebars-template">
+    <div class="entry">
+        <h1>{{title}}</h1>
+        <h2>By {{author.name}}</h2>
+
+        <div class="body">
+            {{body}}
+        </div>
+    </div>
+</script>
+
+<script id="helper-template" type="text/x-handlebars-template">
+    <div class="post">
+        <h1>By {{fullName author}}</h1>
+        <div class="body">{{body}}</div>
+
+        <h1>Comments</h1>
+
+        {{#each comments}}
+        <h2>By {{fullName author}}</h2>
+        <div class="body">{{body}}</div>
+        {{/each}}
+    </div>
+</script>
+
+<script id="helper2-template" type="text/x-handlebars-template">
+    <ul>
+        {{#each items}}
+        <li>{{agree_button}}</li>
+        {{/each}}
+    </ul>
+</script>
+
+<script id="partials-template" type="text/x-handlebars-template">
+    <div class="post">
+        {{> userMessage tagName="h1" }}
+
+        <h1>Comments</h1>
+
+        {{#each comments}}
+        {{> userMessage tagName="h2" }}
+        {{/each}}
+    </div>
+</script>
+
+<script>
+    Handlebars.registerHelper('list', function(items, options) {
+        var out = "<ul>";
+
+        for(var i=0, l=items.length; i<l; i++) {
+            out = out + "<li>" + options.fn(items[i]) + "</li>";
+        }
+
+        return out + "</ul>";
+    });
+</script>
+
+<script>
+    var context = {title: "My New Post", body: "This is my first post!"};
+    var source   = $("#entry-template").html();
+    var template = Handlebars.compile(source);
+    $('#entry-content').append(template(context));
+
+    var source   = $("#escaping-template").html();
+    var template = Handlebars.compile(source);
+    var context = {title: "My New Post", body: "<p>This is a post about &lt;p&gt; tags</p>"};
+    $('#escaping-content').append(template(context));
+
+    var source   = $("#list-template").html();
+    var template = Handlebars.compile(source);
+    var context = {
+        people: [
+            {firstName: "Yehuda", lastName: "Katz"},
+            {firstName: "Carl", lastName: "Lerche"},
+            {firstName: "Alan", lastName: "Johnson"}
+        ]
+    };
+    $('#list-content').append(template(context));
+
+
+    var source   = $("#simple-path-template").html();
+    var template = Handlebars.compile(source);
+    var context = {
+        title: "My First Blog Post!",
+        author: {
+            id: 47,
+            name: "Yehuda Katz"
+        },
+        body: "My first post. Wheeeee!"
+    };
+    $('#simple-path-content').append(template(context));
+
+
+    //helper
+    var context = {
+        author: {firstName: "Alan", lastName: "Johnson"},
+        body: "I Love Handlebars",
+        comments: [{
+            author: {firstName: "Yehuda", lastName: "Katz"},
+            body: "Me too!"
+        }]
+    };
+
+    Handlebars.registerHelper('fullName', function(person) {
+        return person.firstName + " " + person.lastName;
+    });
+
+    var source   = $("#helper-template").html();
+    var template = Handlebars.compile(source);
+    $('#helper-content').append(template(context));
+
+
+
+    var context = {
+        items: [
+            {name: "Handlebars", emotion: "love"},
+            {name: "Mustache", emotion: "enjoy"},
+            {name: "Ember", emotion: "want to learn"}
+        ]
+    };
+
+    Handlebars.registerHelper('agree_button', function() {
+        var emotion = Handlebars.escapeExpression(this.emotion),
+                name = Handlebars.escapeExpression(this.name);
+
+        return new Handlebars.SafeString(
+                "<button>I agree. I " + emotion + " " + name + "</button>"
+        );
+    });
+
+    var source   = $("#helper2-template").html();
+    var template = Handlebars.compile(source);
+    $('#helper2-content').append(template(context));
+
+
+
+    Handlebars.registerPartial('userMessage',
+            '<{{tagName}}>By {{author.firstName}} {{author.lastName}}</{{tagName}}>'
+            + '<div class="body">{{body}}</div>');
+
+    var context = {
+        author: {firstName: "Alan", lastName: "Johnson"},
+        body: "I Love Handlebars",
+        comments: [{
+            author: {firstName: "Yehuda", lastName: "Katz"},
+            body: "Me too!"
+        }]
+    };
+    var source   = $("#partials-template").html();
+    var template = Handlebars.compile(source);
+    $('#partials-content').append(template(context));
+
+</script>
+
+</body>
+</html>
