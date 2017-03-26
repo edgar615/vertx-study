@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"/>
+</head>
+<body>
+<div class="page-container">
+    <!-- Content -->
+
+    <div id="content">
+    </div>
+    <!-- /Content -->
+</div>
+
+<script src="//cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
+<script src="//cdn.bootcss.com/handlebars.js/4.0.6/handlebars.min.js"></script>
+
+<script id="template" type="x-handlebars-template">​
+{{#myNewHelper this score=30 firstName="Jhonny" lastName="Marco"}}​
+Show your HTML content here.
+{{/myNewHelper}}
+​</script>
+​
+
+<script>
+    Handlebars.registerHelper ("myNewHelper", function (dataObject, options) {
+        //JSON.stringify used to serialize the object (to a string)
+        //The output is: {score:30, firstName:"Jhonny", lastName:"Marco"}​
+        console.log(JSON.stringify (options.hash));
+        return options.fn(dataObject);
+    });
+
+    //    The options.inverse method:
+    //            The inverse method is used as the else section of any block statement. So, you would use options.fn to return when the expression in the callback evaluates to a truthy value. But you would use options.inverse when the expression evaluates to falsy (to render content in the else part of the block).
+
+    var contextObj = [{firstName: "Kapil", lastName: "Manish", score: [22, 34, 45, 67]}, {
+        firstName: "Bruce",
+        lastName: "Kasparov",
+        score: [10, 34, 67, 90]
+    }];
+    var source = $("#template").html();
+    var template = Handlebars.compile(source);
+    $('#content').append(template(contextObj));
+</script>
+
+</body>
+</html>

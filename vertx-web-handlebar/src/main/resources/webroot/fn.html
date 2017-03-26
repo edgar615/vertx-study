@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"/>
+</head>
+<body>
+<div class="page-container">
+    <!-- Content -->
+
+    <div id="content">
+    </div>
+    <!-- /Content -->
+</div>
+
+<script src="//cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
+<script src="//cdn.bootcss.com/handlebars.js/4.0.6/handlebars.min.js"></script>
+
+<script id="template" type="x-handlebars-template">​
+{{#userScore this}}​
+​
+<div>{{firstName}} {{lastName}}, Your Total Score is <strong>{{score}}</strong></div>​
+{{/userScore}}
+​</script>
+​
+
+<script>
+    Handlebars.registerHelper("userScore", function (dataObject, options) {
+        var templateWithInterpolatedData = "";
+        for (var i = 0; i < dataObject.length; i++) {
+            //Sum user scores from the score array and replace the array with the total​
+            dataObject[i].score = dataObject[i].score.reduce(function (prev, cur, index, array) {
+                return prev + cur;
+            });
+            //Each object in the data object array is interpolated with the options.fn method, which processes all the HTML from the template and insert the values from the object in their respective positions. ​
+            //Just so you understand the purpose of the options.fn method: it does exactly what the regular handlebars template function does when we pass the data object to the function, to  retrieve the values from the object and insert them into the HTML from the template.​
+            //Without the options.fn object in this example, the raw objects (instead of the interpolated values) would have been returned​
+            templateWithInterpolatedData += options.fn(dataObject[i]);
+        }
+        return templateWithInterpolatedData;
+    });
+
+    //    The options.inverse method:
+    //            The inverse method is used as the else section of any block statement. So, you would use options.fn to return when the expression in the callback evaluates to a truthy value. But you would use options.inverse when the expression evaluates to falsy (to render content in the else part of the block).
+
+    var contextObj = [{firstName: "Kapil", lastName: "Manish", score: [22, 34, 45, 67]}, {
+        firstName: "Bruce",
+        lastName: "Kasparov",
+        score: [10, 34, 67, 90]
+    }];
+    var source = $("#template").html();
+    var template = Handlebars.compile(source);
+    $('#content').append(template(contextObj));
+</script>
+
+</body>
+</html>

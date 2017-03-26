@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"/>
+</head>
+<body>
+<div class="page-container">
+    <!-- Content -->
+
+    <div id="content">
+    </div>
+    <!-- /Content -->
+</div>
+
+<script src="//cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
+<script src="//cdn.bootcss.com/handlebars.js/4.0.6/handlebars.min.js"></script>
+
+<script id="template" type="x-handlebars-template">​
+{{#myNewHelper this score=30 firstName="Jhonny" lastName="Marco"}}​
+Show your HTML content here.
+{{/myNewHelper}}
+​</script>
+​
+
+<script>
+//    // The define function is part of the AMD mechanism for loading ​
+//    ​define([
+//        'jquery',
+//        'underscore',
+//        'handlebars',
+//    ​// Require.js text plugin loads the HTML template pages​
+//    'text!templates/user_account.html',
+//            'text!templates/user_profile.html'],
+//    ​function ($, _, Backbone, HandleBars,
+//               UserAccount_Template, UserProfile_Template) {
+//    ​
+//    ​// These are the two objects we will be using​
+//        userAccountDataObject: {accountNumber:85444, balance: $120.00},
+//        userProfileDataObject: {firstName:”Michael, lastName:”Harrington”},
+//    ​
+//    ​// Compile the Handlebars template that we loaded in (the user_account.html and user_profile.html) and assign them to the following two variables.​
+//        userAccount_compiledTemplate:
+//                HandleBars.compile(UserAccount_Template),
+//                        userProfile_compiledTemplate:
+//        HandleBars.compile(UserProfile_Template),
+//	​
+//    ​// This function will add the Handlebars compiled templates on the page​
+//    ​render: function () {
+//        ​// Use the compiled function (userAccount_compiledTemplate) and pass to it the context (the data object). The result will be the HTML from the template page with the interpolated values from the data object.​
+//        ​
+//        ​this.$(".user-account-div").html
+//            (this.userAccount_compiledTemplate(userAccountDataObject);
+//	​
+//        ​// Ditto for this template function​
+//        ​this.$(".user-profile-div").html
+//            (this.userProfile_compiledTemplate(userProfileDataObject);
+//        });
+
+</script>
+
+</body>
+</html>

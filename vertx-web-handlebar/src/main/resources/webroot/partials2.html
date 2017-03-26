@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"/>
+</head>
+<body>
+<div class="page-container">
+    <!-- Content -->
+
+    <div id="content">
+    </div>
+
+    <!-- /Content -->
+</div>
+
+<script src="//cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
+<script src="//cdn.bootcss.com/handlebars.js/4.0.6/handlebars.min.js"></script>
+
+<script id="people-template" type="text/x-handlebars-template">
+    {{#each people}}
+    {{> person}}
+    {{/each}}
+</script>
+
+<script id="person-partial" type="text/x-handlebars-template">
+    <div class="person">
+        <h2>{{first_name}} {{last_name}}</h2>
+        <div class="phone">{{phone}}</div>
+        <div class="email"><a href="mailto:{{email}}">{{email}}</a></div>
+        <div class="since">User since {{member_since}}</div>
+    </div>
+</script>
+
+
+<script>
+    Handlebars.registerPartial("person", $("#person-partial").html());
+    var template = Handlebars.compile($("#people-template").html());
+
+    var context = { people: [{
+        first_name: "Alan",
+        last_name: "Johnson",
+        email: "alan@test.com",
+        phone: "123-456-7890"
+    }] };
+
+    $('#content').append(template(context));
+</script>
+
+</body>
+</html>

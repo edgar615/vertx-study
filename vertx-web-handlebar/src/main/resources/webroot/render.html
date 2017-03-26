@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"/>
+</head>
+<body>
+<div class="page-container">
+    <!-- Content -->
+
+    <div id="content">
+    </div>
+    <!-- /Content -->
+</div>
+
+<script src="//cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
+<script src="//cdn.bootcss.com/handlebars.js/4.0.6/handlebars.min.js"></script>
+
+<script id="template" type="x-handlebars-template">​
+{{#myNewHelper this score=30 firstName="Jhonny" lastName="Marco"}}​
+Show your HTML content here.
+{{/myNewHelper}}
+​</script>
+​
+
+<script>
+    function render(tpl_name, tpl_data) {
+        if (!render.tpl_cache) {
+            render.tpl_cache = {};
+        }
+        if (!render.tpl_cache[tpl_name]) {
+            var tpl_dir = "/static";
+            var tpl_url = tpl_dir + "/" + tpl_name + ".html";
+
+            var tpl_string;
+            $.ajax({
+                url :tpl_url,
+                method : 'GET',
+                async : false,
+                success : function(data) {
+                    tpl_string = data;
+                }
+            });
+            var template = Handlebars.compile(tpl_string);
+            render.tpl_cache[tpl_name] = template(tpl_data);
+            $('#content').append(render.tpl_cache[tpl_name]);
+        }
+    }
+    var context = {title: "My New Post", body: "This is my first post!"};
+    var source = $("#template").html();
+    render("render_test", context);
+
+</script>
+
+</body>
+</html>
