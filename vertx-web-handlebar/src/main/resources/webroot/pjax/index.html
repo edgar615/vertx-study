@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"/>
+    <title>pjax测试，与handlebar无关</title>
+</head>
+<body>
+<div class="page-container">
+    <!-- Content -->
+    Go to <a href="/static/pjax/pjax.html">next page</a>.
+    Go to <a href="/static/pjax/form.html">form</a>.
+    <div  id="pjax-container"></div>
+    <!-- /Content -->
+</div>
+
+<script src="//cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
+<script src="//cdn.bootcss.com/handlebars.js/4.0.6/handlebars.min.js"></script>
+<script src="//cdn.bootcss.com/jquery.pjax/1.9.6/jquery.pjax.min.js"></script>
+
+
+<script>
+    //alert( "support pjax" + $.support.pjax);
+    $(document).pjax('a', '#pjax-container')
+    $(document).on( 'submit', 'form[data-pjax]',  function(event) {
+        event.preventDefault();
+      $.pjax.submit(event, '#pjax-container')
+//        $.pjax.submit(event, '#pjax-container', {"push": true, "replace": false, "timeout": 5000, "scrollTo": 0, maxCacheLength: 0})
+    })
+
+    $(document).on('pjax:send', function() {
+        //$('#loading').show()
+        alert("send");
+    })
+    $(document).on('pjax:complete', function() {
+//        $('#loading').hide()
+        alert("complete");
+    })
+</script>
+
+</body>
+</html>

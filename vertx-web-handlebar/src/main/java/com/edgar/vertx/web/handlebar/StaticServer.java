@@ -19,6 +19,6 @@ public class StaticServer extends AbstractVerticle {
 //http://javascriptissexy.com/handlebars-js-tutorial-learn-everything-about-handlebars-js-javascript-templating
       Router router = Router.router(vertx);
       router.route("/static/*").handler(StaticHandler.create());
-        vertx.createHttpServer().requestHandler(router::accept).listen(8080);
+        vertx.createHttpServer().requestHandler(router::accept).listen(9000);
     }
 }
