@@ -40,8 +40,8 @@ public class RedisZpopMain extends AbstractVerticle {
               CompositeFuture compositeFuture = ar.result();
               for (int i = 0; i < length; i++) {
                 if (compositeFuture.succeeded(i)) {
-                  if (compositeFuture.result(i) != null) {
-                    array.add((String) compositeFuture.result(i));
+                  if (compositeFuture.resultAt(i) != null) {
+                    array.add((String) compositeFuture.resultAt(i));
                   }
                 }
               }

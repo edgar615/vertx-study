@@ -24,23 +24,36 @@ public class RedisVerticle extends AbstractVerticle {
             .setPort(6379);
 //            .setAuth("Edgar");
     RedisClient redisClient = RedisClient.create(vertx, config);
-
-    redisClient.set("string_key", new JsonObject().put("a", 1)
-            .put("b", new JsonObject().put("foo", "bar")
-                    .put("c", new JsonArray().add(0))).encode(), ar -> {
+    redisClient.del("string_key", ar -> {
       if (ar.succeeded()) {
         System.out.println(ar.result());
       } else {
         System.err.println("error");
       }
-    }).get("string_key", ar -> {
+    })
+            .get("string_key", ar -> {
       if (ar.succeeded()) {
         System.out.println(ar.result());
-        JsonObject jsonObject = new JsonObject(ar.result());
       } else {
         System.err.println("error");
       }
     });
+//    redisClient.set("string_key", new JsonObject().put("a", 1)
+//            .put("b", new JsonObject().put("foo", "bar")
+//                    .put("c", new JsonArray().add(0))).encode(), ar -> {
+//      if (ar.succeeded()) {
+//        System.out.println(ar.result());
+//      } else {
+//        System.err.println("error");
+//      }
+//    }).get("string_key", ar -> {
+//      if (ar.succeeded()) {
+//        System.out.println(ar.result());
+//        JsonObject jsonObject = new JsonObject(ar.result());
+//      } else {
+//        System.err.println("error");
+//      }
+//    });
 
 //    redisClient.hmset("hash_key", new JsonObject().put("a", 1)
 //            .put("b", new JsonObject().put("foo", "bar")

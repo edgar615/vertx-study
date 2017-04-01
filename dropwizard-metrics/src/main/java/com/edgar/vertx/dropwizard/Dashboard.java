@@ -10,6 +10,8 @@ import io.vertx.core.http.HttpServer;
 import io.vertx.core.json.JsonObject;
 import io.vertx.core.metrics.MetricsOptions;
 import io.vertx.ext.dropwizard.DropwizardMetricsOptions;
+import io.vertx.ext.dropwizard.Match;
+import io.vertx.ext.dropwizard.MatchType;
 import io.vertx.ext.dropwizard.MetricsService;
 import io.vertx.ext.dropwizard.impl.JVMMetricsImpl;
 import io.vertx.ext.web.Router;
@@ -27,10 +29,20 @@ import java.util.Set;
 public class Dashboard extends AbstractVerticle {
   // Convenience method so you can run it in your IDE
   public static void main(String[] args) {
-    Vertx.vertx(new VertxOptions()
-                        .setMetricsOptions(new MetricsOptions(new JsonObject().put
-                                ("registryName", "my-registry")).setEnabled(true)))
+//    Vertx.vertx(new VertxOptions()
+//                        .setMetricsOptions(new MetricsOptions(new JsonObject().put
+//                                ("registryName", "my-registry")).setEnabled(true)))
+    MetricsOptions metricsOptions = new DropwizardMetricsOptions()
+            .setRegistryName("my-registry")
+            .setEnabled(true)
+            .addMonitoredHttpServerUri(
+                    new Match().setValue("/")).
+                    addMonitoredHttpServerUri(
+                            new Match().setValue("/foo/.*").setType(
+                                    MatchType.REGEX));
+    Vertx.vertx(new VertxOptions().setMetricsOptions(metricsOptions))
     .deployVerticle(Dashboard.class.getName());
+
   }
 
   @Override
