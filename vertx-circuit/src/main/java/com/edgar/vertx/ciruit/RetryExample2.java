@@ -12,32 +12,28 @@ import java.util.concurrent.atomic.AtomicInteger;
  *
  * @author Edgar  Date 2016/7/1
  */
-public class FallbackExample extends AbstractVerticle {
+public class RetryExample2 extends AbstractVerticle {
   public static void main(String[] args) {
 
-    new Launcher().execute("run", FallbackExample.class.getName());
+    new Launcher().execute("run", RetryExample2.class.getName());
   }
 
   @Override
   public void start() throws Exception {
-    AtomicInteger seq = new AtomicInteger();
-    vertx.createHttpServer().requestHandler(req -> {
-      System.out.println(seq.incrementAndGet());
-      req.response().setStatusCode(400).end();
-    }).listen(8080);
 
     CircuitBreaker breaker = CircuitBreaker.create("my-circuit-breaker", vertx,
                                                    new CircuitBreakerOptions()
                                                            .setMaxFailures(5)
                                                            .setTimeout(1000)
                                                            .setResetTimeout(3000)
-    ).fallback(t -> "HELLO")
+                                                           .setMaxRetries(3)
+    )
             .openHandler(v -> {
-              System.out.println("Circuit opened");
+              System.out.println(System.currentTimeMillis() + " : Circuit opened");
             }).closeHandler(v -> {
-              System.out.println("Circuit closed");
+              System.out.println(System.currentTimeMillis() + " : Circuit closed");
             }).halfOpenHandler(v -> {
-              System.out.println("reset (half-open state)");
+              System.out.println(System.currentTimeMillis() + " : reset (half-open state)");
             });
 
 //        breaker.execute(future -> {
@@ -48,27 +44,23 @@ public class FallbackExample extends AbstractVerticle {
 //        }).setHandler(ar -> {
 //            // Get the operation result.
 //        });
-
+    AtomicInteger seq = new AtomicInteger();
     vertx.setPeriodic(1000, l -> {
+      final long time = System.currentTimeMillis();
+      final int i = seq.incrementAndGet();
       breaker.<String>execute(future -> {
-        vertx.createHttpClient().getNow(8080, "localhost", "/", response -> {
-          if (response.statusCode() != 200) {
-            future.fail("HTTP error");
-          } else {
-            response
-                    .exceptionHandler(future::fail)
-                    .bodyHandler(buffer -> {
-                      future.complete(buffer.toString());
-                    });
-          }
-        });
+        //do nothing
+        System.out.println(System.currentTimeMillis() + " execute:" + i);
       }).setHandler(ar -> {
         if (ar.succeeded()) {
-          System.out.println(ar.result());
+          System.out.println(time + " : OK: "
+                             + ar.result() + " " + i);
         } else {
-          System.out.println(ar.cause());
+          System.out.println(
+                  time + " : ERROR: " + ar.cause() + " " + i);
         }
       });
     });
+
   }
 }

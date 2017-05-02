@@ -5,23 +5,31 @@ import io.vertx.circuitbreaker.CircuitBreakerOptions;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Launcher;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 /**
  * Created by Edgar on 2016/7/1.
  *
  * @author Edgar  Date 2016/7/1
  */
-public class CallbackExample extends AbstractVerticle {
+public class CircuitBreakerExample2 extends AbstractVerticle {
   public static void main(String[] args) {
 
-    new Launcher().execute("run", CallbackExample.class.getName());
+    new Launcher().execute("run", CircuitBreakerExample2.class.getName());
   }
 
   @Override
   public void start() throws Exception {
 
-    vertx.createHttpServer().requestHandler(req -> {
-      req.response().setStatusCode(400).end();
-    }).listen(8080);
+//    AtomicInteger seq = new AtomicInteger();
+//    vertx.createHttpServer().requestHandler(req -> {
+//      int i = 0;
+//      if ((i = seq.incrementAndGet()) > 10) {
+//        req.response().setStatusCode(400).end();
+//      } else {
+//        req.response().setStatusCode(400).end();
+//      }
+//    }).listen(8080);
 
     CircuitBreaker breaker = CircuitBreaker.create("my-circuit-breaker", vertx,
                                                    new CircuitBreakerOptions()
@@ -36,11 +44,11 @@ public class CallbackExample extends AbstractVerticle {
                                                    // to re-try
     )
             .openHandler(v -> {
-              System.out.println("Circuit opened");
+              System.out.println(System.currentTimeMillis() + " : Circuit opened");
             }).closeHandler(v -> {
-              System.out.println("Circuit closed");
+              System.out.println(System.currentTimeMillis() + " : Circuit closed");
             }).halfOpenHandler(v -> {
-              System.out.println("reset (half-open state)");
+              System.out.println(System.currentTimeMillis() + " : reset (half-open state)");
             });
     ;
 
@@ -52,25 +60,22 @@ public class CallbackExample extends AbstractVerticle {
 //        }).setHandler(ar -> {
 //            // Get the operation result.
 //        });
-
+    AtomicInteger seq = new AtomicInteger();
     vertx.setPeriodic(1000, l -> {
-      breaker.<String>executeWithFallback(future -> {
-        vertx.createHttpClient().getNow(8080, "localhost", "/", response -> {
-          if (response.statusCode() != 200) {
-            future.fail("HTTP error");
-          } else {
-            response
-                    .exceptionHandler(future::fail)
-                    .bodyHandler(buffer -> {
-                      future.complete(buffer.toString());
-                    });
-          }
-        });
-      }, r -> "Hello").setHandler(ar -> {
+      final long time = System.currentTimeMillis();
+      final int i = seq.incrementAndGet();
+      breaker.<String>execute(future -> {
+        //do nothing
+        if (i >= 12) {
+          future.complete();
+        }
+      }).setHandler(ar -> {
         if (ar.succeeded()) {
-          System.out.println(ar.result());
+          System.out.println(time + " : OK: "
+                             + ar.result() + " " + i);
         } else {
-          System.out.println(ar.cause());
+          System.out.println(
+                  time + " : ERROR: " + ar.cause() + " " + i);
         }
       });
     });
