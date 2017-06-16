@@ -38,6 +38,7 @@
         <module>vertx-healthcheck</module>
         <module>vertx-kafka</module>
         <module>vertx-consul</module>
+        <module>vertx-shell</module>
     </modules>
 
     <properties>
