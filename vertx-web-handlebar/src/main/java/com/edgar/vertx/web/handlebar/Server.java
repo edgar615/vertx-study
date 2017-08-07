@@ -2,6 +2,7 @@ package com.edgar.vertx.web.handlebar;
 
 import com.edgar.util.vertx.runner.Runner;
 import io.vertx.core.AbstractVerticle;
+import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.templ.HandlebarsTemplateEngine;
 import io.vertx.ext.web.templ.TemplateEngine;
@@ -23,8 +24,40 @@ public class Server extends AbstractVerticle {
       TemplateEngine engine = HandlebarsTemplateEngine.create();
 //
         Router router = Router.router(vertx);
+      router.get("/home").handler(rc -> {
+
+        engine.render(rc, "templates/home.hbs", res -> {
+          if (res.succeeded()) {
+            rc.response().end(res.result());
+          } else {
+            rc.fail(res.cause());
+          }
+        });
+      });
+
+      router.get("/partial").handler(rc -> {
+        rc.put("title", "Block");
+        engine.render(rc, "templates/partial.hbs", res -> {
+          if (res.succeeded()) {
+            rc.response().end(res.result());
+          } else {
+            rc.fail(res.cause());
+          }
+        });
+      });
+      router.get("/layout").handler(rc -> {
+
+        engine.render(rc, "templates/layout.hbs", res -> {
+          if (res.succeeded()) {
+            rc.response().end(res.result());
+          } else {
+            rc.fail(res.cause());
+          }
+        });
+      });
         router.get().handler(rc -> {
            rc.put("name", "vert.x webhoho");
+          rc.put("json", new JsonObject().put("foo", "bar"));
 
             engine.render(rc, "templates/index.hbs", res -> {
                 if (res.succeeded()) {

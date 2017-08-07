@@ -1,0 +1,28 @@
+
+Hello {{context.get("name")}}!
+
+{{context.data.name}}
+
+Request path is {{context.request().path()}}
+
+{{ "If life gives you lemons, eat lemons." | upper | abbreviate(13) }}
+
+{{ min(context.data().user.get("score"), context.data().highscore) }}
+
+
+
+{% for article in context.data().articles %}
+{{article}}
+    <h3>{{ article.getValue("title") }}</h3>
+    <p>{{ article.getValue("content") }}</p>
+{% else %}
+    <p> There are no articles. </p>
+{% endfor %}
+
+{% if category == "news" %}
+    {{ news }}
+{% elseif category == "sports" %}
+    {{ sports }}
+{% else %}
+    <p>Please select a category</p>
+{% endif %}

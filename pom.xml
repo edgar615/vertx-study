@@ -39,6 +39,7 @@
         <module>vertx-kafka</module>
         <module>vertx-consul</module>
         <module>vertx-shell</module>
+        <module>vertx-web-pebble</module>
     </modules>
 
     <properties>
