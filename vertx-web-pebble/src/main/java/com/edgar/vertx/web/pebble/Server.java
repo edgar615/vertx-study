@@ -22,6 +22,18 @@ public class Server extends AbstractVerticle {
 //
     Router router = Router.router(vertx);
 
+    router.get("/home").handler(rc -> {
+      rc.put("layout", "base");
+      engine.render(rc, "template/home.peb", res -> {
+
+        if (res.succeeded()) {
+          rc.response().end(res.result());
+        } else {
+          rc.fail(res.cause());
+        }
+      });
+    });
+
     router.get().handler(rc -> {
       rc.put("name", "Vert.x Web");
       rc.put("user", new JsonObject().put("score", 30).getMap());

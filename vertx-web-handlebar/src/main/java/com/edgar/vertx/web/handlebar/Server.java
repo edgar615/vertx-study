@@ -37,17 +37,8 @@ public class Server extends AbstractVerticle {
 
       router.get("/partial").handler(rc -> {
         rc.put("title", "Block");
+//        rc.put("layout", "templates/layout");
         engine.render(rc, "templates/partial.hbs", res -> {
-          if (res.succeeded()) {
-            rc.response().end(res.result());
-          } else {
-            rc.fail(res.cause());
-          }
-        });
-      });
-      router.get("/layout").handler(rc -> {
-
-        engine.render(rc, "templates/layout.hbs", res -> {
           if (res.succeeded()) {
             rc.response().end(res.result());
           } else {

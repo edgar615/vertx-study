@@ -1,0 +1,18 @@
+<html>
+<head>
+    <title>{% block title %} {% endblock %}</title>
+</head>
+<body>
+<div id="content">
+    {% block content %}
+    Default content goes here.
+    {% endblock %}
+</div>
+
+<div id="footer">
+    {% block footer %}
+    Default footer content
+    {% endblock %}
+</div>
+</body>
+</html>

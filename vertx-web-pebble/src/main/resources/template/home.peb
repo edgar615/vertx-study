@@ -1,0 +1,7 @@
+{% extends "base.peb" %}
+
+{% block title %} Home {% endblock %}
+
+{% block content %}
+Home page content.
+{% endblock %}
