@@ -3,7 +3,9 @@ package com.edgar.vertx.jwt;
 import com.edgar.util.vertx.runner.Runner;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.json.JsonObject;
+import io.vertx.ext.auth.KeyStoreOptions;
 import io.vertx.ext.auth.jwt.JWTAuth;
+import io.vertx.ext.auth.jwt.JWTAuthOptions;
 import io.vertx.ext.auth.jwt.JWTOptions;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.handler.BodyHandler;
@@ -27,7 +29,12 @@ public class HttpSeverVerticle extends AbstractVerticle {
             .put("type", "jceks")
             .put("password", "secret"));
 
-    JWTAuth provider = JWTAuth.create(vertx, config);
+    KeyStoreOptions keyStoreOptions = new KeyStoreOptions(new JsonObject()
+                                                                  .put("path", "keystore.jceks")
+                                                                  .put("type", "jceks")
+                                                                  .put("password", "secret"));
+
+    JWTAuth provider = JWTAuth.create(vertx, new JWTAuthOptions().setKeyStore(keyStoreOptions));
 
     Router router = Router.router(vertx);
     router.route().handler(BodyHandler.create());
