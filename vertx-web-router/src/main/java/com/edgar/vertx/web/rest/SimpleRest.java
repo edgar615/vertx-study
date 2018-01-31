@@ -2,12 +2,14 @@ package com.edgar.vertx.web.rest;
 
 import com.edgar.util.vertx.runner.Runner;
 import io.vertx.core.AbstractVerticle;
+import io.vertx.core.http.HttpMethod;
 import io.vertx.core.http.HttpServerResponse;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
 import io.vertx.ext.web.handler.BodyHandler;
+import io.vertx.ext.web.handler.CorsHandler;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -29,11 +31,18 @@ public class SimpleRest extends AbstractVerticle {
         setUpInitialData();
         Router router = Router.router(vertx);
         router.route().handler(BodyHandler.create());
+        CorsHandler corsHandler = CorsHandler.create("*")
+                .allowedHeader("*")
+                .allowedMethod(HttpMethod.GET)
+                .allowedMethod(HttpMethod.POST)
+                .allowedMethod(HttpMethod.PUT)
+                .allowedMethod(HttpMethod.DELETE);
+        router.route().handler(corsHandler);
         router.get("/products/:productID").handler(this::handleGetProduct);
         router.post("/products/:productId").handler(this::handleAddProduct);
         router.get("/products").handler(this::handleListProducts);
 
-        vertx.createHttpServer().requestHandler(router::accept).listen(8080);
+        vertx.createHttpServer().requestHandler(router::accept).listen(9000);
     }
 
     private void handleGetProduct(RoutingContext routingContext) {
